@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
@@ -17,7 +19,7 @@ import javax.sql.DataSource;
 
 /**
  *
- * @author pedago
+ * @author Arceus-San
  */
 public class DAO {
     
@@ -31,6 +33,28 @@ public class DAO {
 		this.myDataSource = dataSource;
 	}
         
+        
+        
+        public void listeClients() throws DAOException{
+            String sql ="SELECT CUSTOMER_ID,EMAIL FROM CUTOMER";
+            List<CustomerEntity> clients = new ArrayList<CustomerEntity>();
+            
+             try (Connection connection = myDataSource.getConnection();
+		PreparedStatement stmt = connection.prepareStatement(sql)) {
+		try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) { 
+			String id =rs.getString("CUSTOMER_ID");
+                        String mel = rs.getString("EMAIL");
+                        int code  = Integer.parseInt(id);				
+			clients.add(new CustomerEntity(mel,code));
+                    }
+		}
+            }
+            catch (SQLException ex) {
+		Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+		throw new DAOException(ex.getMessage());
+            }    
+        }
         
         /*public List<DiscountCode> listeCodes() throws DAOException{
             List<DiscountCode> result = new LinkedList<>();
