@@ -35,9 +35,9 @@ public class DAO {
         
         
         
-        public void listeClients() throws DAOException{
-            String sql ="SELECT CUSTOMER_ID,EMAIL FROM CUTOMER";
-            List<CustomerEntity> clients = new ArrayList<CustomerEntity>();
+        public List<CustomerEntity> listeClients() throws DAOException{
+            String sql ="SELECT CUSTOMER_ID,EMAIL FROM CUSTOMER";
+            List<CustomerEntity> clients = new ArrayList<>();
             
              try (Connection connection = myDataSource.getConnection();
 		PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -49,38 +49,15 @@ public class DAO {
 			clients.add(new CustomerEntity(mel,code));
                     }
 		}
+                return clients;
             }
+            
             catch (SQLException ex) {
 		Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
 		throw new DAOException(ex.getMessage());
             }    
         }
         
-        /*public List<DiscountCode> listeCodes() throws DAOException{
-            List<DiscountCode> result = new LinkedList<>();
-            String sql ="SELECT * FROM DISCOUNT_CODE";
-            
-            try (Connection connection = myDataSource.getConnection();
-			PreparedStatement stmt = connection.prepareStatement(sql)) {
-
-			try (ResultSet rs = stmt.executeQuery()) {
-				while (rs.next()) { // Tant qu'il y a des enregistrements
-					// On récupère les champs nécessaires de l'enregistrement courant
-					String l =rs.getString("DISCOUNT_CODE");
-					float val = rs.getFloat("RATE");
-					// On crée l'objet entité
-					DiscountCode d = new DiscountCode(l,val);
-					// On l'ajoute à la liste des résultats
-					result.add(d);
-				}
-			}
-		}  catch (SQLException ex) {
-			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
-			throw new DAOException(ex.getMessage());
-		}
-
-		return result;
-        }*/
         
         public void supprCode(String code) throws DAOException{
             String sql ="DELETE FROM DISCOUNT_CODE WHERE DISCOUNT_CODE=?";
