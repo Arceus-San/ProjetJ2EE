@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,8 +59,39 @@ public class DAO {
             }    
         }
         
-        /*SELECT PRODUCT.PRODUCT_CODE,PRODUCT.PRODUCT_ID,PRODUCT.PURCHASE_COST ,PRODUCT.PURCHASE_COST*SUM(PURCHASE_ORDER.QUANTITY) AS TOTAL
-FROM PRODUCT INNER JOIN PURCHASE_ORDER USING (PRODUCT_ID) GROUP BY PRODUCT_ID, PRODUCT_CODE,PURCHASE_COST ORDER BY PRODUCT.PRODUCT_CODE;*/
+/*SELECT PRODUCT.PRODUCT_CODE, PURCHASE_ORDER.SHIPPING_COST+PRODUCT.PURCHASE_COST*SUM(PURCHASE_ORDER.QUANTITY) AS TOTAL
+FROM PRODUCT INNER JOIN PURCHASE_ORDER USING (PRODUCT_ID) GROUP BY PRODUCT_CODE,PURCHASE_COST,PURCHASE_ORDER.SHIPPING_COST ORDER BY PRODUCT.PRODUCT_CODE;*/
+        
+        public HashMap mapProductCode() throws DAOException{
+            String sql ="SELECT PRODUCT.PRODUCT_CODE, PURCHASE_ORDER.SHIPPING_COST+PRODUCT.PURCHASE_COST*SUM(PURCHASE_ORDER.QUANTITY) AS TOTAL FROM PRODUCT INNER JOIN PURCHASE_ORDER USING (PRODUCT_ID) GROUP BY PRODUCT_CODE,PURCHASE_COST,PURCHASE_ORDER.SHIPPING_COST ORDER BY PRODUCT.PRODUCT_CODE";
+            HashMap<String,Float> prodcode = new HashMap<>();
+            
+             try (Connection connection = myDataSource.getConnection();
+		PreparedStatement stmt = connection.prepareStatement(sql)) 
+             {
+		try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) { 
+			String id =rs.getString("PRODUCT_CODE");
+                        float mel = rs.getFloat("TOTAL");
+                        if(prodcode.containsKey(id)){
+                            prodcode.put(id, prodcode.get(id)+mel);
+                        }
+                        else{
+                            prodcode.put(id, mel);
+                        }
+                    }
+		}
+                return prodcode;
+            }
+            
+            catch (SQLException ex) {
+		Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+		throw new DAOException(ex.getMessage());
+            }    
+        }
+        
+        
+        
         
         public void supprCode(String code) throws DAOException{
             String sql ="DELETE FROM DISCOUNT_CODE WHERE DISCOUNT_CODE=?";

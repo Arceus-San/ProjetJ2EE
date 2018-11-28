@@ -5,6 +5,7 @@
  */
 package Modele;
 
+import java.util.HashMap;
 import java.util.List;
 import javax.sql.DataSource;
 import org.junit.After;
@@ -39,6 +40,17 @@ public class DAOTest {
     public void testListeClients() throws DAOException {
         List<CustomerEntity> clients = myDAO.listeClients();
         assertEquals(13, clients.size());
+    }
+    
+    /**
+     * Test of listeClients method, of class DAO.
+     * @throws Modele.DAOException
+     */
+    @Test
+    public void testmapProductCode() throws DAOException {
+        HashMap<String,Float> clients = myDAO.mapProductCode();
+        assertEquals(9987.5f,clients.get("BK"),0.0f);
+        assertEquals(3065.05f,clients.get("CB"),0.0f);
     }
 
     
