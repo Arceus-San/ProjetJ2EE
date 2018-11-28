@@ -78,7 +78,7 @@
                   <br/>
                 </ul>
         </div>
-        <form method='GET'>
+        <form method='POST'>
             <fieldset >
                 <legend> Identifiants : </legend>  
                 <label for="login" ><b>Login :</b></label><br/>
