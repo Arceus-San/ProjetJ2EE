@@ -2,6 +2,7 @@ package Modele;
 
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -60,7 +61,7 @@ public class DAO {
         }
         
         public HashMap mapProductCode() throws DAOException{
-            String sql ="SELECT PRODUCT.PRODUCT_CODE, PURCHASE_ORDER.SHIPPING_COST+PRODUCT.PURCHASE_COST*SUM(PURCHASE_ORDER.QUANTITY) AS TOTAL FROM PRODUCT INNER JOIN PURCHASE_ORDER USING (PRODUCT_ID) GROUP BY PRODUCT_CODE,PURCHASE_COST,PURCHASE_ORDER.SHIPPING_COST ORDER BY PRODUCT.PRODUCT_CODE";
+            String sql ="SELECT PRODUCT_CODE, SUM(SHIPPING_COST+PURCHASE_COST * QUANTITY) AS TOTAL FROM CUSTOMER INNER JOIN PURCHASE_ORDER USING(CUSTOMER_ID) INNER JOIN PRODUCT USING (PRODUCT_ID) GROUP BY PRODUCT_CODE";
             HashMap<String,Float> prodcode = new HashMap<>();
             
              try (Connection connection = myDataSource.getConnection();
@@ -70,12 +71,7 @@ public class DAO {
                     while (rs.next()) { 
 			String id =rs.getString("PRODUCT_CODE");
                         float mel = rs.getFloat("TOTAL");
-                        if(prodcode.containsKey(id)){
-                            prodcode.put(id, prodcode.get(id)+mel);
-                        }
-                        else{
-                            prodcode.put(id, mel);
-                        }
+                        prodcode.put(id, mel);
                     }
 		}
                 return prodcode;
@@ -88,8 +84,56 @@ public class DAO {
         }
         
         
-        /* SELECT CUSTOMER."STATE", SUM(PURCHASE_ORDER.SHIPPING_COST+PRODUCT.PURCHASE_COST*PURCHASE_ORDER.QUANTITY) AS TOTAL FROM CUSTOMER INNER JOIN PURCHASE_ORDER USING(CUSTOMER_ID) INNER JOIN PRODUCT USING (PRODUCT_ID) GROUP BY CUSTOMER."STATE" ORDER BY "STATE"; */
+        public HashMap mapState(String date1, String date2) throws DAOException{
+            String sql ="SELECT STATE, SUM(PURCHASE_COST * QUANTITY+SHIPPING_COST) AS TOTAL FROM CUSTOMER INNER JOIN PURCHASE_ORDER USING (CUSTOMER_ID) INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID AND (PURCHASE_ORDER.SHIPPING_DATE BETWEEN ? AND ?) GROUP BY STATE";
+            HashMap<String,Float> state = new HashMap<>();
+            
+             try (Connection connection = myDataSource.getConnection();
+		PreparedStatement stmt = connection.prepareStatement(sql)){
+                stmt.setString(1, date1);
+                stmt.setString(2, date2);
+		try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) { 
+			String id =rs.getString("STATE");
+                        float mel = rs.getFloat("TOTAL");
+                        state.put(id, mel);
+                    }
+		}
+                return state;
+            }
+            
+            catch (SQLException ex) {
+		Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+		throw new DAOException(ex.getMessage());
+            }    
+        }
         
+        
+        public HashMap mapCustomer(String date1, String date2) throws DAOException{
+            String sql="SELECT NAME, SUM(SHIPPING_COST+PURCHASE_COST * QUANTITY) AS TOTAL FROM CUSTOMER INNER JOIN PURCHASE_ORDER USING (CUSTOMER_ID) INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID AND (PURCHASE_ORDER.SHIPPING_DATE BETWEEN ? AND ?) GROUP BY NAME";
+            HashMap<String,Float> client = new HashMap<>();
+            
+             try (Connection connection = myDataSource.getConnection();
+		PreparedStatement stmt = connection.prepareStatement(sql)){
+                stmt.setString(1, date1);
+                stmt.setString(2, date2);
+		try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) { 
+			String id =rs.getString("NAME");
+                        float mel = rs.getFloat("TOTAL");
+                        client.put(id, mel);
+                    }
+		}
+                return client;
+            }
+            
+            catch (SQLException ex) {
+		Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+		throw new DAOException(ex.getMessage());
+            }    
+        }
+                
+                
         public void supprCode(String code) throws DAOException{
             String sql ="DELETE FROM DISCOUNT_CODE WHERE DISCOUNT_CODE=?";
             
