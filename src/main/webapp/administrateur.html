@@ -56,7 +56,21 @@ and open the template in the editor.
 	</script>
 </head>
 <body>
-    
+    <form>
+   <label for="start">Date debut :</label>
+
+    <input name="dateDebut" type="date" id="start" 
+       value="2018-07-22"
+       min="2000-01-01" max="2018-12-31">
+
+  <label for="fin">Date fin :</label>
+     
+    <input name="dateFin" type="date" id="fin" 
+       value="2018-07-22"
+       min="2000-01-01" max="2018-12-31">
+     <input name="date" value="Changement date" type="SUBMIT">
+     
+    </form>
 	<!-- Le graphique apparaît ici -->
 	<div id="piechart" style="width: 900px; height: 500px;"></div>
 </body>

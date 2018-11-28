@@ -82,10 +82,10 @@
             <fieldset >
                 <legend> Identifiants : </legend>  
                 <label for="login" ><b>Login :</b></label><br/>
-                    <input name="login" id="login" size="10" maxlength="255" title="Votre Email"><br/>
+                    <input name="login" id="login" size="10" maxlength="255" title="Votre Email" style="width:150px"><br/>
                     <br/>
                     <label for="passw"><b>Password :</b></label><br/>
-        <input name="motDePasse" id="passwd" size="10" type="password" maxlength="255" title="Votre mot de passe"><br/>
+        <input name="motDePasse" id="passwd" size="10" type="password" maxlength="255" title="Votre mot de passe" style="width:150px"><br/>
         <br/>
         <input name="action" value="Connexion" type="SUBMIT">
             </fieldset>
