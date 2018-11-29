@@ -34,47 +34,72 @@ public class DAOTest {
     }
 
     /**
-     * Test of listeClients method, of class DAO.
+     * Test of idEtMailClients method, of class DAO.
      * @throws Modele.DAOException
      */
     @Test
-    public void testListeClients() throws DAOException {
-        HashMap<Integer,String> clients = myDAO.listeClients();
+    public void testidEtMailClients() throws DAOException {
+        HashMap<Integer,String> clients = myDAO.idEtMailClients();
         assertEquals(13, clients.keySet().size());
     }
     
     /**
-     * Test of testmapProductCode method, of class DAO.
+     * Test of listePurchase method, of class DAO.
      * @throws Modele.DAOException
      */
     @Test
-    public void testmapProductCode() throws DAOException {
-        HashMap<String,Float> clients = myDAO.mapProductCode();
+    public void testListePurchase() throws DAOException {
+        HashMap<Integer,List<Integer>> commandes = myDAO.listePurchase();
+        System.out.println(commandes.get(2));
+        assertEquals(12, commandes.keySet().size());
+    }
+    
+    /**
+     * Test of testtotalForProductCode method, of class DAO.
+     * @throws Modele.DAOException
+     */
+    @Test
+    public void testtotalForProductCode() throws DAOException {
+        String d1="2011-01-01";
+        String d2="2011-12-31";
+        HashMap<String,Float> clients = myDAO.totalForProductCode(d1,d2);
         assertEquals(9987.5f,clients.get("BK"),0.0f);
         assertEquals(3065.05f,clients.get("CB"),0.0f);
     }
     
     /**
-     * Test of testmapStateWhenNoPurchase method, of class DAO.
+     * Test of testtotalForProductCodeWhenNoPurchase method, of class DAO.
      * @throws Modele.DAOException
      */
     @Test
-    public void testmapStateWhenNoPurchase() throws DAOException {
+    public void testtotalForProductCodeWhenNoPurchase() throws DAOException {
         String d1="2011-01-01";
-        String d2="2011-01-01";
-        HashMap<String,Float> clients = myDAO.mapState(d1,d2);
+        String d2="2011-02-01";
+        HashMap<String,Float> clients = myDAO.totalForProductCode(d1,d2);
         assertEquals(null,clients.get("NY"));
     }
     
     /**
-     * Test of testmapState method, of class DAO.
+     * Test of testtotalForStateWhenNoPurchase method, of class DAO.
      * @throws Modele.DAOException
      */
     @Test
-    public void testmapState() throws DAOException {
+    public void testtotalForStateWhenNoPurchase() throws DAOException {
+        String d1="2011-01-01";
+        String d2="2011-01-01";
+        HashMap<String,Float> clients = myDAO.totalForState(d1,d2);
+        assertEquals(null,clients.get("NY"));
+    }
+    
+    /**
+     * Test of testtotalForState method, of class DAO.
+     * @throws Modele.DAOException
+     */
+    @Test
+    public void testtotalForState() throws DAOException {
         String d1="2011-01-01";
         String d2="2011-12-31";
-        HashMap<String,Float> clients = myDAO.mapState(d1,d2);
+        HashMap<String,Float> clients = myDAO.totalForState(d1,d2);
         assertEquals(135888.8f,clients.get("CA"),0.0f);
         assertEquals(160895.66f,clients.get("FL"),0.0f);
         assertEquals(874.5f,clients.get("GA"),0.0f);
@@ -83,26 +108,26 @@ public class DAOTest {
     }
     
     /**
-     * Test of testmapCustomerWhenNoPurchase method, of class DAO.
+     * Test of testtotalForCustomerWhenNoPurchase method, of class DAO.
      * @throws Modele.DAOException
      */
     @Test
-    public void testmapCustomerWhenNoPurchase() throws DAOException {
+    public void testtotalForCustomerWhenNoPurchase() throws DAOException {
         String d1="2011-01-01";
         String d2="2011-01-01";
-        HashMap<String,Float> clients = myDAO.mapCustomer(d1,d2);
+        HashMap<String,Float> clients = myDAO.totalForCustomer(d1,d2);
         assertEquals(null,clients.get("NY"));
     }
     
     /**
-     * Test of testmapCustomer method, of class DAO.
+     * Test of testtotalForCustomer method, of class DAO.
      * @throws Modele.DAOException
      */
     @Test
-    public void testmapCustomer() throws DAOException {
+    public void testtotalForCustomer() throws DAOException {
         String d1="2011-01-01";
         String d2="2011-12-31";
-        HashMap<String,Float> clients = myDAO.mapCustomer(d1,d2);
+        HashMap<String,Float> clients = myDAO.totalForCustomer(d1,d2);
         assertEquals(9987.5f,clients.get("Big Car Parts"),0.0f);
         assertEquals(15853.f,clients.get("Jumbo Eagle Corp"),0.0f);
         assertEquals(200295.99f,clients.get("Zed Motor Co"),0.0f);
@@ -160,43 +185,42 @@ public class DAOTest {
     }*/
     
     /**
-     * Test of mapProductInfo method, of class DAO.
+     * Test of productsInfos method, of class DAO.
      * @throws Modele.DAOException
      */
     @Test
-    public void testmapProductInfo() throws DAOException {
-        HashMap<Integer,Product> produits = myDAO.mapProductInfo();
-        System.out.println(produits.keySet());
+    public void testproductsInfos() throws DAOException {
+        HashMap<Integer,Product> produits = myDAO.productsInfos();
         assertEquals(32,produits.keySet().size());
     }
     
     /**
-     * Test of mapProductInfoValue method, of class DAO.
+     * Test of productsInfosValue method, of class DAO.
      * @throws Modele.DAOException
      */
     @Test
-    public void testmapProductInfoValue() throws DAOException {
-        HashMap<Integer,Product> produits = myDAO.mapProductInfo();
+    public void testproductsInfosValue() throws DAOException {
+        HashMap<Integer,Product> produits = myDAO.productsInfos();
         assertEquals("Boite de sushis",produits.get(10000).getDescription());
     }
     
     /**
-     * Test of mapCustomerInfo method, of class DAO.
+     * Test of CustomersInfos method, of class DAO.
      * @throws Modele.DAOException
      */
     @Test
-    public void testmapCustomerInfo() throws DAOException {
-        HashMap<Integer,CustomerEntity> clients = myDAO.mapCustomerInfo();
+    public void testCustomersInfos() throws DAOException {
+        HashMap<Integer,CustomerEntity> clients = myDAO.CustomersInfos();
         assertEquals(13,clients.keySet().size());
     }
     
     /**
-     * Test of mapCustomerInfoValue method, of class DAO.
+     * Test of CustomersInfos method, of class DAO.
      * @throws Modele.DAOException
      */
     @Test
-    public void testmapCustomerInfoValue() throws DAOException {
-        HashMap<Integer,CustomerEntity> clients = myDAO.mapCustomerInfo();
+    public void testCustomersInfosValue() throws DAOException {
+        HashMap<Integer,CustomerEntity> clients = myDAO.CustomersInfos();
         assertEquals("Zed Motor Co",clients.get(753).getName());
     }
     

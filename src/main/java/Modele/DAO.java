@@ -2,7 +2,6 @@ package Modele;
 
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +36,7 @@ public class DAO {
         
         
         
-        public HashMap<Integer,String> listeClients() throws DAOException{
+        public HashMap<Integer,String> idEtMailClients() throws DAOException{
             String sql ="SELECT CUSTOMER_ID,EMAIL FROM CUSTOMER";
             HashMap<Integer,String> clients = new HashMap<>();
             
@@ -63,13 +62,15 @@ public class DAO {
         Entrée : 
         Renvoie une HashMap avec comme clé un product_code et comme valeur correspondante le montant total correspondant à cet état
         */
-        public HashMap mapProductCode() throws DAOException{
-            String sql ="SELECT PRODUCT_CODE, SUM(SHIPPING_COST+PURCHASE_COST * QUANTITY) AS TOTAL FROM CUSTOMER INNER JOIN PURCHASE_ORDER USING(CUSTOMER_ID) INNER JOIN PRODUCT USING (PRODUCT_ID) GROUP BY PRODUCT_CODE";
+        public HashMap totalForProductCode(String date1, String date2) throws DAOException{
+            String sql ="SELECT PRODUCT_CODE, SUM(SHIPPING_COST+PURCHASE_COST * QUANTITY) AS TOTAL FROM CUSTOMER INNER JOIN PURCHASE_ORDER USING(CUSTOMER_ID) INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID AND (PURCHASE_ORDER.SHIPPING_DATE BETWEEN ? AND ?) GROUP BY PRODUCT_CODE";
             HashMap<String,Float> prodcode = new HashMap<>();
             
              try (Connection connection = myDataSource.getConnection();
 		PreparedStatement stmt = connection.prepareStatement(sql)) 
              {
+                stmt.setString(1, date1);
+                stmt.setString(2, date2);
 		try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) { 
 			String id =rs.getString("PRODUCT_CODE");
@@ -90,7 +91,7 @@ public class DAO {
         Entrée : les dates sur lesquelles on travaille
         Renvoie une HashMap avec comme clé un état et comme valeur correspondante le montant total dépensé correspondant
         */
-        public HashMap mapState(String date1, String date2) throws DAOException{
+        public HashMap totalForState(String date1, String date2) throws DAOException{
             String sql ="SELECT STATE, SUM(PURCHASE_COST * QUANTITY+SHIPPING_COST) AS TOTAL FROM CUSTOMER INNER JOIN PURCHASE_ORDER USING (CUSTOMER_ID) INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID AND (PURCHASE_ORDER.SHIPPING_DATE BETWEEN ? AND ?) GROUP BY STATE";
             HashMap<String,Float> state = new HashMap<>();
             
@@ -118,7 +119,7 @@ public class DAO {
         Entrée : les dates sur lesquelles on travaille
         Renvoie une HashMap avec comme clé un nom de client et comme valeur correspondante le montant total qu'il a dépensé
         */
-        public HashMap mapCustomer(String date1, String date2) throws DAOException{
+        public HashMap totalForCustomer(String date1, String date2) throws DAOException{
             String sql="SELECT NAME, SUM(SHIPPING_COST+PURCHASE_COST * QUANTITY) AS TOTAL FROM CUSTOMER INNER JOIN PURCHASE_ORDER USING (CUSTOMER_ID) INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID AND (PURCHASE_ORDER.SHIPPING_DATE BETWEEN ? AND ?) GROUP BY NAME";
             HashMap<String,Float> client = new HashMap<>();
             
@@ -257,7 +258,7 @@ public class DAO {
         Récupère toutes les infos des produits dans la table PRODUCT au moment de la requete
         Elle met dans une HashMap en clé l'id du produit et en valeur correspondante un Product qui contient toutes ses informations (product_code,cost,description,ect...)
         */
-        public HashMap mapProductInfo() throws DAOException{
+        public HashMap productsInfos() throws DAOException{
             String sql="SELECT * FROM PRODUCT";
             HashMap<Integer,Product> produits = new HashMap<>();
             
@@ -290,7 +291,7 @@ public class DAO {
         Récupère toutes les infos des clients dans la table CUSTOMER au moment de la requete
         Elle met dans une HashMap en clé l'id du client et en valeur correspondante un CustomerEntity qui contient toutes ses informations (name,adressline,credit_limit,ect...)
         */
-        public HashMap<Integer,CustomerEntity> mapCustomerInfo() throws DAOException{
+        public HashMap<Integer,CustomerEntity> CustomersInfos() throws DAOException{
             String sql ="SELECT * FROM CUSTOMER";
             HashMap<Integer,CustomerEntity> clients = new HashMap<>();
             
@@ -322,5 +323,101 @@ public class DAO {
 		throw new DAOException(ex.getMessage());
             }
         }
+        
+        /*
+        Modifie le produit en focntion de son id et des valeurs renseignées, seules les clés primaires et étrangères ne sont pas (et ne peuvent pas) être modifiées
+        */
+        public int modifCustomer(int id, String name, String addressline1, String addressline2, String city, String state, String phone, String fax, String email,int credit_limit) throws DAOException{
+            String sql ="UPDATE CUSTOMER SET NAME=?, ADDRESSLINE1=?, ADDRESSLINE2=?, CITY=?, STATE=?, PHONE=?, FAX=?, EMAIL=?, CREDIT_LIMIT=? WHERE CUSTOMER_ID=?";
+            int maj=0;
+            
+            try (Connection connection = myDataSource.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+                        stmt.setString(1, name);
+                        stmt.setString(2, addressline1);
+                        stmt.setString(3, addressline2);
+                        stmt.setString(4, city);
+                        stmt.setString(5, state);
+                        stmt.setString(6,phone);
+                        stmt.setString(7,fax);
+                        stmt.setString(8,email);
+                        stmt.setInt(9,credit_limit);
+                        stmt.setInt(10,id);
+                        maj = stmt.executeUpdate();
+                        return maj;
+			
+		}  catch (SQLException ex) {
+			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+			throw new DAOException(ex.getMessage());
+		}
+            
+        }
+        
+        /*
+        Renvoie une HashMap des commandes (sous forme de List<Integer> contenant le numéro des commandes) passées par les clients (représentés par leurs id)
+        */
+        public HashMap<Integer,List<Integer>> listePurchase() throws DAOException{
+            String sql ="SELECT ORDER_NUM,CUSTOMER_ID FROM PURCHASE_ORDER";
+            HashMap<Integer,List<Integer>> commandes = new HashMap<>();
+            
+             try (Connection connection = myDataSource.getConnection();
+		PreparedStatement stmt = connection.prepareStatement(sql)) {
+		try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) { 
+			int id =rs.getInt("CUSTOMER_ID");
+                        int commande = rs.getInt("ORDER_NUM");
+                        if(commandes.keySet().contains(id)){
+                            List<Integer> l = commandes.get(id);
+                            l.add(commande);
+                            commandes.put(id,l);
+                        }else{
+                            List<Integer> l = new ArrayList<>();
+                            l.add(commande);
+                            commandes.put(id,l);
+                        }
+                    }
+		}
+                return commandes;
+            }
+            
+            catch (SQLException ex) {
+		Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+		throw new DAOException(ex.getMessage());
+            }    
+        }
     
+        /*
+        Récupère toutes les infos des bons de commande dans la table PURCHASE_ORDER au moment de la requete
+        Elle met dans une HashMap en clé l'order_num correspondant un PurchaseOrder qui contient toutes ses informations (quantity,shipping_cost,ect...)
+        */
+        public HashMap<Integer,PurchaseOrder> PurchaseOrdersInfos() throws DAOException{
+            String sql ="SELECT * FROM PURCHASE_ORDER";
+            HashMap<Integer,PurchaseOrder> purord = new HashMap<>();
+            
+             try (Connection connection = myDataSource.getConnection();
+		PreparedStatement stmt = connection.prepareStatement(sql)){
+		try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+			int id = rs.getInt("ORDER_NUM");
+                        int customid = rs.getInt("CUSTOMER_ID");
+                        int prodid = rs.getInt("PRODUCT_ID");
+                        int qt = rs.getInt("QUANTITY");
+                        float shippingcost = rs.getFloat("SHIPPING_COST");
+                        String sales = rs.getString("SALES_DATE");
+                        String shippingdate = rs.getString("SHIPPING_DATE");
+                        String transporteur = rs.getString("FREIGHT_COMPANY");
+
+                        PurchaseOrder p= new PurchaseOrder(id,customid,prodid,qt,shippingcost,sales,shippingdate,transporteur);
+                        purord.put(id, p);
+                    }
+		}
+                return purord;
+            }
+            
+            catch (SQLException ex) {
+		Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+		throw new DAOException(ex.getMessage());
+            }
+        }
 }
