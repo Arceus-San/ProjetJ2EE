@@ -5,10 +5,16 @@
  */
 package Modele;
 
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.sql.DataSource;
+import org.hsqldb.cmdline.SqlFile;
+import org.hsqldb.cmdline.SqlToolError;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,16 +28,34 @@ public class DAOTest {
     
     private DAO myDAO; // L'objet à tester
     private DataSource myDataSource; // La source de données à utiliser
+    private static Connection myConnection ;
     
     @Before
-    public void setUp() {
+    public void setUp() throws SQLException, IOException, SqlToolError  {
         myDataSource = DataSourceFactory.getDataSource();
+        myConnection = myDataSource.getConnection();
+	// On crée le schema de la base de test
+	executeSQLScript(myConnection, "schema.sql");
+	// On y met des données
+	executeSQLScript(myConnection, "bigtestdata.sql");
 	myDAO = new DAO(myDataSource);
     }
     
     @After
-    public void tearDown() {
-    }
+	public void tearDown() throws IOException, SqlToolError, SQLException {
+		myConnection.close(); // La base de données de test est détruite ici
+             	myDAO = null; // Pas vraiment utile
+	}
+	
+	private void executeSQLScript(Connection connexion, String filename)  throws IOException, SqlToolError, SQLException {
+		// On initialise la base avec le contenu d'un fichier de test
+		String sqlFilePath = DAOTest.class.getResource(filename).getFile();
+		SqlFile sqlFile = new SqlFile(new File(sqlFilePath));
+
+		sqlFile.setConnection(connexion);
+		sqlFile.execute();
+		sqlFile.closeReader();		
+	}
 
     /**
      * Test of idEtMailClients method, of class DAO.
@@ -50,7 +74,6 @@ public class DAOTest {
     @Test
     public void testListePurchase() throws DAOException {
         HashMap<Integer,List<Integer>> commandes = myDAO.listePurchase();
-        System.out.println(commandes.get(2));
         assertEquals(12, commandes.keySet().size());
     }
     
@@ -137,7 +160,7 @@ public class DAOTest {
      * Test of addProduct method, of class DAO.
      * @throws Modele.DAOException
      */
-    //@Test
+    @Test
     public void testaddProduct() throws DAOException {
         int maj = myDAO.addProduct(10000, 19978451, "MS", 15.00f, 100, 10.0f, "TRUE", "Boite de sushis");
         assertEquals(1,maj);
@@ -149,6 +172,7 @@ public class DAOTest {
      */
     @Test
     public void testsupprProduct() throws DAOException {
+        myDAO.addProduct(10000, 19978451, "MS", 15.00f, 100, 10.0f, "TRUE", "Boite de sushis");
         int maj = myDAO.supprProduct("10000");
         assertEquals(1,maj);
     }
@@ -157,7 +181,7 @@ public class DAOTest {
      * Test of modifProduct method, of class DAO.
      * @throws Modele.DAOException
      */
-    //@Test
+    @Test
     public void testmodifProduct() throws DAOException {
         myDAO.addProduct(10001, 19978451, "MS", 15.00f, 100, 10.0f, "TRUE", "Boite de sushis");
         int maj = myDAO.modifProduct(10001,15.00f, 0, 10.0f, "FALSE", "Plat de makis");
@@ -192,7 +216,7 @@ public class DAOTest {
     @Test
     public void testproductsInfos() throws DAOException {
         HashMap<Integer,Product> produits = myDAO.productsInfos();
-        assertEquals(32,produits.keySet().size());
+        assertEquals(30,produits.keySet().size());
     }
     
     /**
@@ -201,9 +225,9 @@ public class DAOTest {
      */
     @Test
     public void testproductsInfosValue() throws DAOException {
-        myDAO.addProduct(10000, 19978451, "MS", 15.00f, 100, 10.0f, "TRUE", "Boite de sushis");
+        myDAO.addProduct(10001, 19978451, "MS", 15.00f, 100, 10.0f, "TRUE", "Boite de sushis");
         HashMap<Integer,Product> produits = myDAO.productsInfos();
-        assertEquals("Boite de sushis",produits.get(10000).getDescription());
+        assertEquals("Boite de sushis",produits.get(10001).getDescription());
     }
     
     /**
@@ -224,6 +248,26 @@ public class DAOTest {
     public void testCustomersInfosValue() throws DAOException {
         HashMap<Integer,CustomerEntity> clients = myDAO.CustomersInfos();
         assertEquals("Zed Motor Co",clients.get(753).getName());
+    }	
+    
+    /**
+     * Test of addPurchaseOrder method, of class DAO.
+     * @throws Modele.DAOException
+     */
+    @Test
+    public void testaddPurchaseOrder() throws DAOException {
+        int maj = myDAO.addPurchaseOrder(1, 3, 980001, 10, 100, "2018-12-04", "2018-12-04", "La Poste");
+        assertEquals(1,maj);
     }
     
+    /**
+     * Test of supprPurchaseOrder method, of class DAO.
+     * @throws Modele.DAOException
+     */
+    @Test
+    public void testsupprPurchaseOrder() throws DAOException {
+        myDAO.addPurchaseOrder(1, 3, 980001, 10, 100, "2018-12-04", "2018-12-04", "La Poste");
+        int maj = myDAO.supprPurchaseOrder("1");
+        assertEquals(1,maj);
+    }
 }

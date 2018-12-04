@@ -45,6 +45,20 @@
             <artifactId>gson</artifactId>
             <version>2.8.2</version>
         </dependency>
+        <!-- Le driver JDBC utilisé seulement pour le test -->        
+        <dependency>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>2.0.0</version>
+                <scope>test</scope>
+        </dependency>
+        <!-- sqltool utilisé seulement pour le test pour initialiser la base -->                
+        <dependency>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>sqltool</artifactId>
+                <version>2.0.0</version>
+                <scope>test</scope>
+        </dependency>	
     </dependencies>
 
     <build>

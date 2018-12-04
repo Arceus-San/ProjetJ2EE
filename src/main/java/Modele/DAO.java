@@ -420,4 +420,50 @@ public class DAO {
 		throw new DAOException(ex.getMessage());
             }
         }
+        
+    public int addPurchaseOrder(int id, int customid, int prodid, int qt, float shippingcost, String sales,String shippingdate,String transporteur) throws DAOException{
+            String sql ="INSERT INTO PURCHASE_ORDER VALUES (?,?,?,?,?,?,?,?)";
+            int maj=0;
+            
+            try (Connection connection = myDataSource.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+                        
+			stmt.setInt(1,prodid);
+                        stmt.setInt(2, customid);
+                        stmt.setInt(3, prodid);
+                        stmt.setInt(4, qt);
+                        stmt.setFloat(5, shippingcost);
+                        stmt.setString(6, sales);
+                        stmt.setString(7, shippingdate);
+                        stmt.setString(8, transporteur);
+                        maj = stmt.executeUpdate();
+                        return maj;
+			
+		}  catch (SQLException ex) {
+			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+			throw new DAOException(ex.getMessage());
+		}
+            
+        }
+    
+    public int supprPurchaseOrder(String ordernum) throws DAOException{
+            String sql ="DELETE FROM PURCHASE_ORDER WHERE ORDER_NUM=?";
+            int maj=0;
+            
+            try (Connection connection = myDataSource.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+			stmt.setString(1, ordernum);
+
+			maj = stmt.executeUpdate();
+                        return maj;
+			}
+			
+		catch (SQLException ex) {
+			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+			throw new DAOException(ex.getMessage());
+		}
+            
+        }
 }
