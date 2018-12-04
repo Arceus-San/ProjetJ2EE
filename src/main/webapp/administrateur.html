@@ -13,6 +13,7 @@ and open the template in the editor.
 	<!-- On charge l'API Google -->
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<script type="text/javascript">
+// Chiffres d'affaires par produit           
 		google.load("visualization", "1", {packages: ["corechart"]});
 
 	
@@ -53,22 +54,22 @@ and open the template in the editor.
 			alert("Erreur: " + status + " : " + message);
 		}
 
+// Zones Géographique
+                google.charts.load('current', {
+                  'packages':['geochart'],
+                  // Note: you will need to get a mapsApiKey for your project.
+                  // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+                  'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
+                });
+                google.charts.setOnLoadCallback(drawRegionsMap);
 
- google.charts.load('current', {
-        'packages':['geochart'],
-        // Note: you will need to get a mapsApiKey for your project.
-        // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
-        'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
-      });
-      google.charts.setOnLoadCallback(drawRegionsMap);
+                function drawRegionsMap(dataGeo) {
+                  var data = google.visualization.arrayToDataTable(dataGeo);
+                  var options = {region: 'US' ,resolution: 'provinces',title: 'Chiffre d`affaires par zone Géographique',};
+                  var geochart = new google.visualization.GeoChart(document.getElementById('regions_div'));
 
-      function drawRegionsMap(dataGeo) {
-        var data = google.visualization.arrayToDataTable(dataGeo);
-        var options = {region: 'US' ,resolution: 'provinces',title: 'Chiffre d`affaires par zone Géographique',};
-        var geochart = new google.visualization.GeoChart(document.getElementById('regions_div'));
-
-        geochart.draw(data, options);
-      }
+                    geochart.draw(data, options);
+                }
       		function doGeoAjax() {
 			$.ajax({
 				url: "ChiffreAffairesGeo",
@@ -84,7 +85,41 @@ and open the template in the editor.
 							chartData.push([client, result.records[client]]);
 						}
 						// On dessine le graphique
-						drawChart(chartData);
+						drawRegionsMap(chartData);
+					},
+				error: showError
+			});
+		}
+// Chiffres d'affaires par client
+
+
+		function drawChartClient(dataClient) {
+			var data = google.visualization.arrayToDataTable(dataClient);
+			var options = {
+				title: 'Chiffre d`affaires par Clients',
+				is3D: true
+			};
+			var Clientchart = new google.visualization.PieChart(document.getElementById('piechartclient'));
+			Clientchart.draw(data, options);
+		}
+
+		// Afficher les ventes par client
+		function doClientAjax() {
+			$.ajax({
+				url: "ChiffreAffairesClients",
+                                data: $("#ClientForm").serialize(),
+				dataType: "json",
+				success: // La fonction qui traite les résultats
+					function (result) {
+						// On reformate le résultat comme un tableau
+						var chartData = [];
+						// On met le descriptif des données
+						chartData.push(["Client", "chiffre d'affaires"]);
+						for(var client in result.records) {
+							chartData.push([client, result.records[client]]);
+						}
+						// On dessine le graphique
+						drawChartClient(chartData);
 					},
 				error: showError
 			});
@@ -94,53 +129,56 @@ and open the template in the editor.
 		function showError(xhr, status, message) {
 			alert("Erreur: " + status + " : " + message);
 		}
+
 	</script>
-        
-        
-        
-        
-        
-        
+           
 </head>
 <body>
-    <form id='codeForm' onsubmit="event.preventDefault() ; doAjax()">
-   <label for="start">Date debut :</label>
-
-    <input name="dateDebut" type="date" id="start" 
-       value="2018-07-22"
-       min="2000-01-01" max="2018-12-31">
-
-  <label for="fin">Date fin :</label>
-     
-    <input name="dateFin" type="date" id="fin" 
-       value="2018-07-22"
-       min="2000-01-01" max="2018-12-31">
-     <input name="date" value="Changement date" type="SUBMIT">
-     
-    </form>
-
-    
-	<!-- Le graphique apparaît ici -->
-	<div id="piechart" style="width: 900px; height: 500px;"></div>
+<-- Graphique chiffres d'affaires par produit --!>
+ <form id='codeForm' onsubmit="event.preventDefault() ; doAjax()">
+            <label for="start">Date debut :</label>
+            <input name="dateDebut" type="date" id="start" 
+                value="2018-07-22"
+                min="2000-01-01" max="2018-12-31">
+            <label for="fin">Date fin :</label>
+            <input name="dateFin" type="date" id="fin" 
+                value="2018-07-22"
+                min="2000-01-01" max="2018-12-31">
+            <input name="date" value="Changement date" type="SUBMIT">
+ </form>
+<div id="piechart" style="width: 900px; height: 500px;"></div>
         
-            
-    <form id='geoForm' onsubmit="event.preventDefault() ; doGeoAjax()">
-   <label for="start">Date debut :</label>
+<-- Graphique chiffres d'affaires par zone Géographique --!>            
+  <form id='geoForm' onsubmit="event.preventDefault() ; doGeoAjax()">
+            <label for="start">Date debut :</label>
+            <input name="dateDebut" type="date" id="startgeo" 
+                value="2018-07-22"
+                min="2000-01-01" max="2018-12-31">
+            <label for="fin">Date fin :</label>
+            <input name="dateFin" type="date" id="fingeo" 
+                value="2018-07-22"
+                min="2000-01-01" max="2018-12-31">
+            <input name="date" value="Changement date" type="SUBMIT"> 
+  </form>
+   <div id="regions_div" style="width: 900px; height: 500px;"></div>      
+<-- Graphique chiffres d'affaires par client --!>     
+  <form id='ClientForm' onsubmit="event.preventDefault() ; doClientAjax()">
+        <label for="start">Date debut :</label>
 
-    <input name="dateDebut" type="date" id="startgeo" 
-       value="2018-07-22"
-       min="2000-01-01" max="2018-12-31">
+        <input name="dateDebut" type="date" id="startclient" 
+            value="2018-07-22"
+            min="2000-01-01" max="2018-12-31">
 
-  <label for="fin">Date fin :</label>
+        <label for="fin">Date fin :</label>
      
-    <input name="dateFin" type="date" id="fingeo" 
-       value="2018-07-22"
-       min="2000-01-01" max="2018-12-31">
-     <input name="date" value="Changement date" type="SUBMIT">
+        <input name="dateFin" type="date" id="finclient" 
+                value="2018-07-22"
+                min="2000-01-01" max="2018-12-31">
+        <input name="date" value="Changement date" type="SUBMIT">
      
-    </form>
+  </form>
+  <div id="piechartclient" style="width: 900px; height: 500px;"></div>        
         
-        
-        <div id="regions_div" style="width: 900px; height: 500px;"></div>
+
 </body>
 </html>
