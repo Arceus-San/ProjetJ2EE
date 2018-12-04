@@ -6,6 +6,7 @@ and open the template in the editor.
 -->
 <html>
 <head>
+        <meta charset="utf-8" />
 	<title>Visualisation Google</title>
 	<!-- On charge JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -14,9 +15,7 @@ and open the template in the editor.
 	<script type="text/javascript">
 		google.load("visualization", "1", {packages: ["corechart"]});
 
-		// Après le chargement de la page, on fait l'appel AJAX
-		google.setOnLoadCallback(doAjax);
-		
+	
 		function drawChart(dataArray) {
 			var data = google.visualization.arrayToDataTable(dataArray);
 			var options = {
@@ -30,7 +29,8 @@ and open the template in the editor.
 		// Afficher les ventes par client
 		function doAjax() {
 			$.ajax({
-				url: "",
+				url: "ChiffreAffairesProduit",
+                                data: $("#codeForm").serialize(),
 				dataType: "json",
 				success: // La fonction qui traite les résultats
 					function (result) {
@@ -38,8 +38,8 @@ and open the template in the editor.
 						var chartData = [];
 						// On met le descriptif des données
 						chartData.push(["Produit", "chiffre d'affaires"]);
-						for(var client in result) {
-							chartData.push([client, result[client]]);
+						for(var client in result.records) {
+							chartData.push([client, result.records[client]]);
 						}
 						// On dessine le graphique
 						drawChart(chartData);
@@ -56,7 +56,7 @@ and open the template in the editor.
 	</script>
 </head>
 <body>
-    <form>
+    <form id='codeForm' onsubmit="event.preventDefault() ; doAjax()">
    <label for="start">Date debut :</label>
 
     <input name="dateDebut" type="date" id="start" 
