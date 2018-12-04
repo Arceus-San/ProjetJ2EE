@@ -5,8 +5,15 @@
  */
 package Controller;
 
+import Modele.DAO;
+import Modele.DAOException;
+import Modele.DataSourceFactory;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
+import java.util.Properties;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author pedago
  */
-public class Controller extends HttpServlet {
+public class ChiffreAffairesGeo extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,7 +36,31 @@ public class Controller extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
+		DAO dao = new DAO(DataSourceFactory.getDataSource());
+
+		Properties resultat = new Properties();
+                
+                String dateDebut = request.getParameter("dateDebut");
+                String dateFin = request.getParameter("dateFin");
+		
+                try {
+                    resultat.put("records", dao.totalForState(dateDebut, dateFin));
+                     
+		} catch (DAOException  ex) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			resultat.put("records", Collections.EMPTY_LIST);
+			resultat.put("message", ex.getMessage());
+		}
+
+		try (PrintWriter out = response.getWriter()) {
+			// On spécifie que la servlet va générer du JSON
+			response.setContentType("application/json;charset=UTF-8");
+
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			String gsonData = gson.toJson(resultat);
+			out.println(gsonData);
+		}
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

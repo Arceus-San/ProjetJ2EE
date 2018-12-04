@@ -8,6 +8,14 @@
         <servlet-name>ChiffreAffairesProduit</servlet-name>
         <servlet-class>Controller.ChiffreAffairesProduit</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChiffreAffairesGeo</servlet-name>
+        <servlet-class>Controller.ChiffreAffairesGeo</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChiffreAffairesClients</servlet-name>
+        <servlet-class>Controller.ChiffreAffairesClients</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -15,6 +23,14 @@
     <servlet-mapping>
         <servlet-name>ChiffreAffairesProduit</servlet-name>
         <url-pattern>/ChiffreAffairesProduit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChiffreAffairesGeo</servlet-name>
+        <url-pattern>/ChiffreAffairesGeo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChiffreAffairesClients</servlet-name>
+        <url-pattern>/ChiffreAffairesClients</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

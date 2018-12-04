@@ -35,9 +35,8 @@ public class ChiffreAffairesProduit extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
-                // Créér le DAO avec sa source de données
 		DAO dao = new DAO(DataSourceFactory.getDataSource());
-		// Properties est une Map<clé, valeur> pratique pour générer du JSON
+
 		Properties resultat = new Properties();
                 
                 String dateDebut = request.getParameter("dateDebut");
@@ -55,9 +54,7 @@ public class ChiffreAffairesProduit extends HttpServlet {
 		try (PrintWriter out = response.getWriter()) {
 			// On spécifie que la servlet va générer du JSON
 			response.setContentType("application/json;charset=UTF-8");
-			// Générer du JSON
-			// Gson gson = new Gson();
-			// setPrettyPrinting pour que le JSON généré soit plus lisible
+                        
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			String gsonData = gson.toJson(resultat);
 			out.println(gsonData);
