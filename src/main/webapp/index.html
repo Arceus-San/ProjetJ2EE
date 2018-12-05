@@ -34,7 +34,7 @@
             }
 
             // Ajouter un code
-            function addCode() {
+            function commander(code) {
                 $.ajax({
                     url: "addCode",
                     // serialize() renvoie tous les paramètres saisis dans le formulaire
@@ -76,23 +76,32 @@
         <link rel="stylesheet" type="text/css" href="css/tableformat.css">
     </head>
     <body>
-        
         <h1>
-            DONNEES PERSONNELLES :
+            Listes des Commandes :
         </h1>
          <!-- La zone où les résultats vont s'afficher -->
         <div id="codes"></div>
-
+        
+        
+        
         <!-- Le template qui sert à formatter la liste des codes -->
         <script id="codesTemplate" type="text/template">
             <TABLE>
-            <tr><th>Customer_id</th><th>ZIP</th><th>NAME</th><th>ADRESSLINE1</th><th>ADRESSLINE2</th><th>CITY</th><th>STATE</th><th>PHONE</th><th>FAX</th>EMAIL<th>CREDIT_LIMIT</th></tr>
+            <tr><th>Numero</th><th>Customer</th><th>Product_ID</th><th>Quantité</th><th>Shipping_Cost</th><th>Sales_date</th><th>Shipping_date</th><th>Freight_Company</th></tr>
             {{! Pour chaque enregistrement }}
             {{#records}}
                 {{! Une ligne dans la table }}
-                <TR><TD>{{discountCode}}</TD><TD>{{formattedRate}}</TD><TD><button onclick="deleteCode('{{discountCode}}')">Supprimer</button></TD></TR>
+                <TR><TD>{{orderNum}}</TD><TD>{{CustomerId}}</TD><TD>{{ProductId}}</TD><TD>{{Quantity}}</TD><TD>{{ShippingCost}}</TD><TD>{{SalesDate}}</TD><TD>{{ShippingDate}}</TD><TD>{{FreightCompany}}</TD><TD><button onclick="Commander('{{orderNum}}')">Commander</button></TD></TR>
             {{/records}}
             </TABLE>
         </script>
+ 
+        <table border=2 >
+                <tr> <th>Numero</th> <th>Customer</th> <th>Product_ID</th> <th>Quantité</th> <th>Shipping_Cost</th> <th>Sales_date</th> <th>Shipping_date</th> <th>Freight_Company</th></tr>
+                <c:forEach var="customer" items="${customers}">
+                    <tr> <td>${customer.order_num}</td> <td>${customer.customer_id}</td> <td>${customer.product_id}</td><td>${customer.quantity}</td><td>${customer.shipping_cost}</td><td>${customer.sales_date}</td><td>${customer.shipping_date}</td><td>${customer.freight_company}</td><TD><button onclick="commander('${customer.customerId}')">Commander</button></td></tr>
+                </c:forEach>
+        </table>
+
     </body>
 </html>
