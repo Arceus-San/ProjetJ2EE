@@ -429,7 +429,7 @@ public class DAO {
 			PreparedStatement stmt = connection.prepareStatement(sql)) {
 
                         
-			stmt.setInt(1,prodid);
+			stmt.setInt(1,id);
                         stmt.setInt(2, customid);
                         stmt.setInt(3, prodid);
                         stmt.setInt(4, qt);
@@ -447,20 +447,46 @@ public class DAO {
             
         }
     
-    public int supprPurchaseOrder(String ordernum) throws DAOException{
+    public int supprPurchaseOrder(int ordernum) throws DAOException{
             String sql ="DELETE FROM PURCHASE_ORDER WHERE ORDER_NUM=?";
             int maj=0;
             
             try (Connection connection = myDataSource.getConnection();
 			PreparedStatement stmt = connection.prepareStatement(sql)) {
 
-			stmt.setString(1, ordernum);
+			stmt.setInt(1, ordernum);
 
 			maj = stmt.executeUpdate();
                         return maj;
 			}
 			
 		catch (SQLException ex) {
+			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+			throw new DAOException(ex.getMessage());
+		}
+            
+        }
+    
+    /*
+        Modifie la commande en focntion de son numéro et des valeurs renseignées, seules les clés primaires et étrangères ne sont pas (et ne peuvent pas) être modifiées
+        */
+        public int modifPurchaseOrder(int id,int qt, float shippingcost, String sales,String shippingdate,String transporteur) throws DAOException{
+            String sql ="UPDATE PURCHASE_ORDER SET QUANTITY=?, SHIPPING_COST=?, SALES_DATE=?, SHIPPING_DATE=?, FREIGHT_COMPANY=? WHERE ORDER_NUM=?";
+            int maj=0;
+            
+            try (Connection connection = myDataSource.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+                        stmt.setInt(1, qt);
+                        stmt.setFloat(2, shippingcost);
+                        stmt.setString(3, sales);
+                        stmt.setString(4, shippingdate);
+                        stmt.setString(5, transporteur);
+                        stmt.setInt(6,id);
+                        maj = stmt.executeUpdate();
+                        return maj;
+                        
+		}  catch (SQLException ex) {
 			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
 			throw new DAOException(ex.getMessage());
 		}

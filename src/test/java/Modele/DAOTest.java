@@ -42,20 +42,20 @@ public class DAOTest {
     }
     
     @After
-	public void tearDown() throws IOException, SqlToolError, SQLException {
-		myConnection.close(); // La base de données de test est détruite ici
-             	myDAO = null; // Pas vraiment utile
-	}
-	
-	private void executeSQLScript(Connection connexion, String filename)  throws IOException, SqlToolError, SQLException {
-		// On initialise la base avec le contenu d'un fichier de test
-		String sqlFilePath = DAOTest.class.getResource(filename).getFile();
-		SqlFile sqlFile = new SqlFile(new File(sqlFilePath));
+    public void tearDown() throws IOException, SqlToolError, SQLException {
+        myConnection.close(); // La base de données de test est détruite ici
+        myDAO = null; // Pas vraiment utile
+    }
 
-		sqlFile.setConnection(connexion);
-		sqlFile.execute();
-		sqlFile.closeReader();		
-	}
+    private void executeSQLScript(Connection connexion, String filename)  throws IOException, SqlToolError, SQLException {
+        // On initialise la base avec le contenu d'un fichier de test
+        String sqlFilePath = DAOTest.class.getResource(filename).getFile();
+        SqlFile sqlFile = new SqlFile(new File(sqlFilePath));
+
+        sqlFile.setConnection(connexion);
+        sqlFile.execute();
+        sqlFile.closeReader();		
+    }
 
     /**
      * Test of idEtMailClients method, of class DAO.
@@ -256,7 +256,7 @@ public class DAOTest {
      */
     @Test
     public void testaddPurchaseOrder() throws DAOException {
-        int maj = myDAO.addPurchaseOrder(1, 3, 980001, 10, 100, "2018-12-04", "2018-12-04", "La Poste");
+        int maj = myDAO.addPurchaseOrder(1, 3, 980001, 10, 100.f, "2018-12-04", "2018-12-04", "La Poste");
         assertEquals(1,maj);
     }
     
@@ -266,8 +266,19 @@ public class DAOTest {
      */
     @Test
     public void testsupprPurchaseOrder() throws DAOException {
-        myDAO.addPurchaseOrder(1, 3, 980001, 10, 100, "2018-12-04", "2018-12-04", "La Poste");
-        int maj = myDAO.supprPurchaseOrder("1");
+        myDAO.addPurchaseOrder(1, 3, 980001, 10, 100.f, "2018-12-04", "2018-12-04", "La Poste");
+        int maj = myDAO.supprPurchaseOrder(1);
+        assertEquals(1,maj);
+    }
+    
+    /**
+     * Test of modifPurchaseOrder method, of class DAO.
+     * @throws Modele.DAOException
+     */
+    @Test
+    public void testmodifPurchaseOrder() throws DAOException {
+        myDAO.addPurchaseOrder(1, 3, 980001, 10, 100.f, "2018-12-04", "2018-12-04", "La Poste");
+        int maj = myDAO.modifPurchaseOrder(1,100,200.f,"2018-12-04", "2018-12-04","Chronopst");
         assertEquals(1,maj);
     }
 }
