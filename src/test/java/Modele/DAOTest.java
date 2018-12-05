@@ -32,7 +32,7 @@ public class DAOTest {
     
     @Before
     public void setUp() throws SQLException, IOException, SqlToolError  {
-        myDataSource = DataSourceFactory.getDataSource();
+        myDataSource = DataSourceFactory.getTestDataSource();
         myConnection = myDataSource.getConnection();
 	// On crée le schema de la base de test
 	executeSQLScript(myConnection, "schema.sql");

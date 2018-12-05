@@ -6,7 +6,7 @@ import javax.sql.DataSource;
 
 public class DataSourceFactory {
     
-    	/*public static DataSource getDataSource() {
+    public static DataSource getDataSource() {
 		org.apache.derby.jdbc.ClientDataSource ds = new org.apache.derby.jdbc.ClientDataSource();
 		ds.setDatabaseName("sample");
 		ds.setUser("app");
@@ -16,9 +16,9 @@ public class DataSourceFactory {
 		// port on which Network Server is listening
 		ds.setPortNumber(1527);
 		return ds;
-	}*/
+    }
     
-    public static DataSource getDataSource() {
+    public static DataSource getTestDataSource() {
         org.hsqldb.jdbc.JDBCDataSource ds = new org.hsqldb.jdbc.JDBCDataSource();
         ds.setDatabase("jdbc:hsqldb:mem:testcase;shutdown=true");
         ds.setUser("sa");
