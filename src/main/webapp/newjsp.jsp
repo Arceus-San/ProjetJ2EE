@@ -10,7 +10,9 @@
  <title>Edition des taux de remise (AJAX)</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- On charge jQuery -->
-        <script	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<link href="/jtable/themes/metro/blue/jtable.min.css" rel="stylesheet" type="text/css" />
+ 
+ <script	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <!-- On charge le moteur de template mustache https://mustache.github.io/ -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
         <script>
@@ -18,6 +20,7 @@
                     function () {
                         // On montre la liste des codes
                         showCodes();
+
                     }
             );
 
@@ -31,16 +34,26 @@
                             function (result) {
                                 // Le code source du template est dans la page
                                 var template = $('#codesTemplate').html();
+                                
+                                var chartData = [];
+                                // On met le descriptif des données
+                                chartData.push(["Produit", "chiffre d'affaires"]);
+                                for(var client in result.records) {
+                                    chartData.push([client, result.records[client]]);
+                                }
+                                console.log(chartData);
                                 // On combine le template avec le résultat de la requête
-                                var processedTemplate = Mustache.to_html(template, result);
+                                var processedTemplate = Mustache.to_html(template, chartData);
                                 // On affiche la liste des options dans le select
                                 $('#codes').html(processedTemplate);
+                               
+                                
                             }
                 });
             }
 
             // Ajouter un code
-            function commander(code) {
+            function addCode(Code) {
                 $.ajax({
                     url: "addCode",
                     // serialize() renvoie tous les paramètres saisis dans le formulaire
@@ -78,33 +91,25 @@
             }
 
         </script>
-        <!-- un CSS pour formatter la table -->
-        <link rel="stylesheet" type="text/css" href="css/tableformat.css">
-    </head>
-    <body>
-        <h1>
-            Listes des Commandes :
-        </h1>
+<body>
+<a href='allCodes' target="_blank">Voir les données brutes</a><br>
+<h1>Edition des taux de remise (AJAX)</h1>
          <!-- La zone où les résultats vont s'afficher -->
-        <div id="codes"></div>
+        <div id="codes">
+           
+        </div>
         <!-- Le template qui sert à formatter la liste des codes -->
         <script id="codesTemplate" type="text/template">
             <TABLE>
-            <tr><th>Numero</th><th>Customer</th><th>Product_ID</th><th>Quantité</th><th>Shipping_Cost</th><th>Sales_date</th><th>Shipping_date</th><th>Freight_Company</th></tr>
+            <tr><th>Numero</th><th>Customer_id</th><th>Product_id</th><th>Quantity</th><th>Shipping_cost</th><th>Sales_date</th><th>Shipping_date</th><th>freight_company</th></tr>
             {{! Pour chaque enregistrement }}
             {{#records}}
                 {{! Une ligne dans la table }}
-                <TR><TD>{{orderNum}}</TD><TD>{{CustomerId}}</TD><TD>{{ProductId}}</TD><TD>{{Quantity}}</TD><TD>{{ShippingCost}}</TD><TD>{{SalesDate}}</TD><TD>{{ShippingDate}}</TD><TD>{{FreightCompany}}</TD><TD><button onclick="deleteCode('{{orderNum}}')">Commander</button></TD></TR>
+                <TR><TD>{{order_num}}</TD><TD>{{records.customer_id}}</TD><TD>{{records.product_id}}</TD><TD>{{records.quantity}}</TD><TD>{{records.shipping_cost}}</TD><TD>{{records.sales_date}}</TD><TD>{{records.shipping_date}}</TD><TD>{{records.freight_company}}</TD><TD><button onclick="addCode('{{order_num}}')">Commander</button></TD></TR>
             {{/records}}
             </TABLE>
         </script>
- 
-        <table border=2 >
-                <tr> <th>Numero</th> <th>Customer</th> <th>Product_ID</th> <th>Quantité</th> <th>Shipping_Cost</th> <th>Sales_date</th> <th>Shipping_date</th> <th>Freight_Company</th></tr>
-                <c:forEach var="customer" items="${customers}">
-                    <tr> <td>${customer.order_num}</td> <td>${customer.customer_id}</td> <td>${customer.product_id}</td><td>${customer.quantity}</td><td>${customer.shipping_cost}</td><td>${customer.sales_date}</td><td>${customer.shipping_date}</td><td>${customer.freight_company}</td><TD><button onclick="commander('${customer.customerId}')">Commander</button></td></tr>
-                </c:forEach>
-        </table>
 
-    </body>
+
+</body>
 </html>

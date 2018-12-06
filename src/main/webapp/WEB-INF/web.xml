@@ -16,6 +16,10 @@
         <servlet-name>ChiffreAffairesClients</servlet-name>
         <servlet-class>Controller.ChiffreAffairesClients</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>allCodes</servlet-name>
+        <servlet-class>Controller.allCodes</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>ChiffreAffairesClients</servlet-name>
         <url-pattern>/ChiffreAffairesClients</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>allCodes</servlet-name>
+        <url-pattern>/allCodes</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

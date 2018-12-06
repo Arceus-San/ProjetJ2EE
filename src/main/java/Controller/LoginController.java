@@ -47,7 +47,7 @@ public class LoginController extends HttpServlet {
                 String pass = request.getParameter("motDePasse");
                 
                 if(login.equals(this.adminLogin) && pass.equals(this.adminPass)){
-                    request.getRequestDispatcher("administrateur.html").forward(request, response);
+                    request.getRequestDispatcher("newjsp.jsp").forward(request, response);
                     
                 }else{
                     try{
