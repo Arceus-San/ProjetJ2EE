@@ -10,9 +10,7 @@
  <title>Edition des taux de remise (AJAX)</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- On charge jQuery -->
-<link href="/jtable/themes/metro/blue/jtable.min.css" rel="stylesheet" type="text/css" />
- 
- <script	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <!-- On charge le moteur de template mustache https://mustache.github.io/ -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
         <script>
@@ -32,20 +30,48 @@
                     error: showError,
                     success: // La fonction qui traite les résultats
                             function (result) {
+                                console.log(result);
+                                var chartData = [];
+                                var h = {};
                                 // Le code source du template est dans la page
                                 var template = $('#codesTemplate').html();
-                                
-                                var chartData = [];
-                                // On met le descriptif des données
-                                chartData.push(["Produit", "chiffre d'affaires"]);
                                 for(var client in result.records) {
-                                    chartData.push([client, result.records[client]]);
-                                }
-                                console.log(chartData);
+                                chartData.push(result.records[client]);
+                            }
+                                h.records=chartData;
+         
+                                console.log(h);
+                                var processedTemplate = Mustache.to_html(template, h);
                                 // On combine le template avec le résultat de la requête
-                                var processedTemplate = Mustache.to_html(template, chartData);
-                                // On affiche la liste des options dans le select
                                 $('#codes').html(processedTemplate);
+                               
+                                
+                            }
+                });
+            }
+            
+            function showCodes2() {
+                // On fait un appel AJAX pour chercher les codes
+                $.ajax({
+                    url: "allProduit",
+                    dataType: "json",
+                    error: showError,
+                    success: // La fonction qui traite les résultats
+                            function (result) {
+                                console.log(result);
+                                var chartData = [];
+                                var h = {};
+                                // Le code source du template est dans la page
+                                var template = $('#codesTemplate2').html();
+                                for(var client in result.records) {
+                                chartData.push(result.records[client]);
+                            }
+                                h.records=chartData;
+         
+                                console.log(h);
+                                var processedTemplate = Mustache.to_html(template, h);
+                                // On combine le template avec le résultat de la requête
+                                $('#codes2').html(processedTemplate);
                                
                                 
                             }
@@ -57,7 +83,7 @@
                 $.ajax({
                     url: "addCode",
                     // serialize() renvoie tous les paramètres saisis dans le formulaire
-                    data: $("#codeForm").serialize(),
+                    data: {"code2": code2},
                     dataType: "json",
                     success: // La fonction qui traite les résultats
                             function (result) {
@@ -72,13 +98,12 @@
             // Supprimer un code
             function deleteCode(code) {
                 $.ajax({
-                    url: "deleteCode",
+                    url: "deletePurchaseOrder",
                     data: {"code": code},
                     dataType: "json",
                     success: 
                             function (result) {
                                 showCodes();
-                                console.log(result);
                             },
                     error: showError
                 });
@@ -92,12 +117,14 @@
 
         </script>
 <body>
-<a href='allCodes' target="_blank">Voir les données brutes</a><br>
 <h1>Edition des taux de remise (AJAX)</h1>
          <!-- La zone où les résultats vont s'afficher -->
-        <div id="codes">
-           
-        </div>
+        
+        
+        
+        <div id="codes"></div>
+        <a href='#' onclick='showCodes()'>Passer une nouvelle commande</a>
+        <div id="codes2"></div>
         <!-- Le template qui sert à formatter la liste des codes -->
         <script id="codesTemplate" type="text/template">
             <TABLE>
@@ -105,11 +132,31 @@
             {{! Pour chaque enregistrement }}
             {{#records}}
                 {{! Une ligne dans la table }}
-                <TR><TD>{{order_num}}</TD><TD>{{records.customer_id}}</TD><TD>{{records.product_id}}</TD><TD>{{records.quantity}}</TD><TD>{{records.shipping_cost}}</TD><TD>{{records.sales_date}}</TD><TD>{{records.shipping_date}}</TD><TD>{{records.freight_company}}</TD><TD><button onclick="addCode('{{order_num}}')">Commander</button></TD></TR>
+                <TR><TD>{{order_num}}</TD><TD>{{customer_id}}</TD><TD>{{product_id}}</TD><TD>{{quantity}}</TD><TD>{{shipping_cost}}</TD><TD>{{sales_date}}</TD><TD>{{shipping_date}}</TD><TD>{{freight_company}}</TD><TD><button onclick="deleteCode('{{order_num}}')">Supprimer</button></TD></TR>
             {{/records}}
             </TABLE>
         </script>
-
+    <script id="codesTemplate2" type="text/template">
+            
+            <table>
+            
+                <tr>
+                    <th>Numero du produit</th><th>Numero du fournisseur</th><th>Code du produit</th><th>Prix</th><th>Quantité disponible</th>
+                    <th>Balisage</th><th>Disponible</th><th>Description</th><th>Action</th><th></th>
+                </tr>
+                
+                {{#records}}
+                    <tr>
+                        <td>{{Product_ID}}</td><td>{{Manufacturer_ID}}</td><td>{{Product_Code}}</td><td>{{Purchase_Cost}}</td><td>{{Quantity_on_hand}}</td>
+                        <td>{{markup}}</td><td>{{available}}</td><td>{{Description}}</td><th>
+                            <button onclick="addPO('{{Product_ID}}')">Commander</button>
+                        </th>
+                    </tr>
+                {{/records}}
+            
+            </table>
+            
+        </script>
 
 </body>
 </html>

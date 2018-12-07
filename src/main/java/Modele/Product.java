@@ -9,7 +9,7 @@ package Modele;
  *
  * @author Arceus-San
  */
-class Product {
+public class Product {
     
     private int id;
     private int manuf_id;

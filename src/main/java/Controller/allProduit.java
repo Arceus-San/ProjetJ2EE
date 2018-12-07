@@ -12,22 +12,21 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author pedago
+ * @author guillaume
  */
-public class allCodes extends HttpServlet {
+@WebServlet(name = "allProduit", urlPatterns = {"/allProduit"})
+public class allProduit extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,15 +37,13 @@ public class allCodes extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
-
-		// Créér le DAO avec sa source de données
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 		DAO dao = new DAO(DataSourceFactory.getDataSource());
 		Properties resultat = new Properties();
 
                 try {
-                    resultat.put("records", dao.PurchaseOrdersInfos());
+                    resultat.put("records", dao.productsInfos());
 
                 } catch (DAOException ex) {
                     Logger.getLogger(allCodes.class.getName()).log(Level.SEVERE, null, ex);
