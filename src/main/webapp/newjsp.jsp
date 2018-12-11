@@ -83,7 +83,7 @@
                 $.ajax({
                     url: "addCode",
                     // serialize() renvoie tous les paramètres saisis dans le formulaire
-                    data: {"code2": code2},
+                    data: {"code2": Code},
                     dataType: "json",
                     success: // La fonction qui traite les résultats
                             function (result) {
@@ -119,15 +119,12 @@
 <body>
 <h1>Edition des taux de remise (AJAX)</h1>
          <!-- La zone où les résultats vont s'afficher -->
-        
-        
-        
         <div id="codes"></div>
-        <a href='#' onclick='showCodes()'>Passer une nouvelle commande</a>
+        <a href='#' onclick='showCodes2()'>Passer une nouvelle commande</a>
         <div id="codes2"></div>
         <!-- Le template qui sert à formatter la liste des codes -->
         <script id="codesTemplate" type="text/template">
-            <TABLE>
+            <TABLE border=2>
             <tr><th>Numero</th><th>Customer_id</th><th>Product_id</th><th>Quantity</th><th>Shipping_cost</th><th>Sales_date</th><th>Shipping_date</th><th>freight_company</th></tr>
             {{! Pour chaque enregistrement }}
             {{#records}}
@@ -138,7 +135,7 @@
         </script>
     <script id="codesTemplate2" type="text/template">
             
-            <table>
+            <TABLE border=2>
             
                 <tr>
                     <th>Numero du produit</th><th>Numero du fournisseur</th><th>Code du produit</th><th>Prix</th><th>Quantité disponible</th>
@@ -147,14 +144,14 @@
                 
                 {{#records}}
                     <tr>
-                        <td>{{Product_ID}}</td><td>{{Manufacturer_ID}}</td><td>{{Product_Code}}</td><td>{{Purchase_Cost}}</td><td>{{Quantity_on_hand}}</td>
-                        <td>{{markup}}</td><td>{{available}}</td><td>{{Description}}</td><th>
-                            <button onclick="addPO('{{Product_ID}}')">Commander</button>
+                        <td>{{id}}</td><td>{{manuf_id}}</td><td>{{prod_code}}</td><td>{{cost}}</td><td>{{quantity}}</td>
+                        <td>{{markup}}</td><td>{{available}}</td><td>{{description}}</td><th>
+                            <button onclick="addPO({{Product_ID}})">Commander</button>
                         </th>
                     </tr>
                 {{/records}}
             
-            </table>
+            </TABLE>
             
         </script>
 

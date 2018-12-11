@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author guillaume
  */
-@WebServlet(name = "AddPurchaseOrder_InJSON", urlPatterns = {"/AddPurchaseOrder"})
+//@WebServlet(name = "AddPurchaseOrder_InJSON", urlPatterns = {"/AddPurchaseOrder"})
 public class AddPurchaseOrder extends HttpServlet {
 
     /**
@@ -43,12 +43,12 @@ public class AddPurchaseOrder extends HttpServlet {
             throws ServletException, IOException, DAOException {
         DAO dao = new DAO(DataSourceFactory.getDataSource());
 	int product_ID = Integer.parseInt(request.getParameter("code2"));
-        HashMap<Integer,Product> produits = new HashMap<>();
-        produits.entrySet(product_ID);
+        
         String message;
+        //dao.addPurchaseOrder(product_ID, int customid, int prodid, int qt, float shippingcost, String sales,String shippingdate,String transporteur);
                 try {
-                
-            dao.addProduct(product_ID, 1, "SW",309.6f,5,8.3f, "2018-11-29","2018-12-01");
+               
+            
             message = "Purchase Order ajouté";
         } catch (NumberFormatException ex) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
