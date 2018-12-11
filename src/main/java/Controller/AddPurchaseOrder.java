@@ -43,12 +43,15 @@ public class AddPurchaseOrder extends HttpServlet {
             throws ServletException, IOException, DAOException {
         DAO dao = new DAO(DataSourceFactory.getDataSource());
 	int product_ID = Integer.parseInt(request.getParameter("code2"));
+        int customerID = (int)request.getSession(true).getAttribute("clientID");
+        int quantity = Integer.parseInt(request.getParameter("Quantite"));
+        String companie = request.getParameter("Companie");
+        System.out.println(quantity);
         
         String message;
         //dao.addPurchaseOrder(product_ID, int customid, int prodid, int qt, float shippingcost, String sales,String shippingdate,String transporteur);
                 try {
-               
-            
+            dao.addPurchaseOrder(98703, customerID, product_ID, quantity, 80.6f, "2018-12-11", "2018-12-11", companie);
             message = "Purchase Order ajouté";
         } catch (NumberFormatException ex) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

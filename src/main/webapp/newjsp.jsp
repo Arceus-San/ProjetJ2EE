@@ -71,7 +71,7 @@
                                 console.log(h);
                                 var processedTemplate = Mustache.to_html(template, h);
                                 // On combine le template avec le résultat de la requête
-                                $('#codes2').html(processedTemplate);
+                                $('#Codes2').html(processedTemplate);
                                
                                 
                             }
@@ -81,9 +81,9 @@
             // Ajouter un code
             function addCode(Code) {
                 $.ajax({
-                    url: "addCode",
+                    url: "AddPurchaseOrder",
                     // serialize() renvoie tous les paramètres saisis dans le formulaire
-                    data: {"code2": Code},
+                    data: {"code2": Code, "Quantite" : ${"#Quantite"}.val() , "Companie" : ${"#Companie"}.val()},
                     dataType: "json",
                     success: // La fonction qui traite les résultats
                             function (result) {
@@ -112,7 +112,7 @@
 
             // Fonction qui traite les erreurs de la requête
             function showError(xhr, status, message) {
-                alert(JSON.parse(xhr.responseText).message);
+                alert("Erreur: " + status + " : " + message);
             }
 
         </script>
@@ -120,8 +120,8 @@
 <h1>Edition des taux de remise (AJAX)</h1>
          <!-- La zone où les résultats vont s'afficher -->
         <div id="codes"></div>
-        <a href='#' onclick='showCodes2()'>Passer une nouvelle commande</a>
-        <div id="codes2"></div>
+        <a href='#' onclick="showCodes2()">Passer une nouvelle commande</a>
+        <div id="Codes2"></div>
         <!-- Le template qui sert à formatter la liste des codes -->
         <script id="codesTemplate" type="text/template">
             <TABLE border=2>
@@ -139,14 +139,14 @@
             
                 <tr>
                     <th>Numero du produit</th><th>Numero du fournisseur</th><th>Code du produit</th><th>Prix</th><th>Quantité disponible</th>
-                    <th>Balisage</th><th>Disponible</th><th>Description</th><th>Action</th><th></th>
+                    <th>Balisage</th><th>Disponible</th><th>Description</th><th>Quantite</th><th>Companie</th><th>Action</th>
                 </tr>
                 
                 {{#records}}
                     <tr>
                         <td>{{id}}</td><td>{{manuf_id}}</td><td>{{prod_code}}</td><td>{{cost}}</td><td>{{quantity}}</td>
-                        <td>{{markup}}</td><td>{{available}}</td><td>{{description}}</td><th>
-                            <button onclick="addPO({{Product_ID}})">Commander</button>
+                        <td>{{markup}}</td><td>{{available}}</td><td>{{description}}</td><th><input id="Quantite" value="1" type="number"></th><th><input id="Companie" type="text" value="Com"></th><th>
+                            <button onclick="addCode('{{id}}')">Commander</button>
                         </th>
                     </tr>
                 {{/records}}
