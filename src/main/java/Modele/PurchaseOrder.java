@@ -9,7 +9,7 @@ package Modele;
  *
  * @author Areus-San
  */
-class PurchaseOrder {
+public class PurchaseOrder {
     
     private int order_num;
     private int customer_id;

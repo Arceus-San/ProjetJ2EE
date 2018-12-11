@@ -47,16 +47,21 @@ public class LoginController extends HttpServlet {
                 String pass = request.getParameter("motDePasse");
                 
                 if(login.equals(this.adminLogin) && pass.equals(this.adminPass)){
-                    request.getRequestDispatcher("newjsp.jsp").forward(request, response);
+                    request.getRequestDispatcher("administrateur.html").forward(request, response);
                     
                 }else{
                     try{
+                        int clientID = Integer.parseInt(pass);
                         HashMap<Integer,String> allIdsAndMails = dao.idEtMailClients();
-                        
-                        if(allIdsAndMails.get(Integer.parseInt(pass)).equals(login)){
+                        /*
+                        Personne test:
+                            email:jumboeagle@example.com
+                            pass:1
+                        */
+                        if(login != null & allIdsAndMails.get(clientID).equals(login)){
                             System.out.println("CLIENT ACCESS GRANTED!");
-                            //TODO: Renvoyer vers la page des clients
-                            request.getRequestDispatcher("Accueil.jsp").forward(request, response);
+                            request.getSession(true).setAttribute("clientID", clientID);
+                            request.getRequestDispatcher("newjsp.jsp").forward(request, response);
 
                         }else{
                            System.out.println("CLIENT ACCESS DENIED!");

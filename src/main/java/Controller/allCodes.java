@@ -8,11 +8,13 @@ package Controller;
 import Modele.DAO;
 import Modele.DAOException;
 import Modele.DataSourceFactory;
+import Modele.PurchaseOrder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Properties;
@@ -44,9 +46,20 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 		// Créér le DAO avec sa source de données
 		DAO dao = new DAO(DataSourceFactory.getDataSource());
 		Properties resultat = new Properties();
+                int customerID = (int)request.getSession(true).getAttribute("clientID");
 
                 try {
-                    resultat.put("records", dao.PurchaseOrdersInfos());
+                    HashMap<Integer,PurchaseOrder> allPurchaseOrder  =  dao.PurchaseOrdersInfos();
+        
+                    ArrayList<PurchaseOrder> productList = new ArrayList<>();
+
+                    for(int purchaseOrderID : dao.listePurchase().get(customerID)){
+                        productList.add(allPurchaseOrder.get(purchaseOrderID));
+                    }
+        
+                    System.out.println(productList);
+                    
+                    resultat.put("records", productList);
 
                 } catch (DAOException ex) {
                     Logger.getLogger(allCodes.class.getName()).log(Level.SEVERE, null, ex);
