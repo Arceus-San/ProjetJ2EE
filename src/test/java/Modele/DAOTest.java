@@ -32,7 +32,7 @@ public class DAOTest {
     
     @Before
     public void setUp() throws SQLException, IOException, SqlToolError  {
-        myDataSource = DataSourceFactory.getTestDataSource();
+        myDataSource = getTestDataSource();
         myConnection = myDataSource.getConnection();
 	// On crée le schema de la base de test
 	executeSQLScript(myConnection, "schema.sql");
@@ -281,4 +281,13 @@ public class DAOTest {
         int maj = myDAO.modifPurchaseOrder(1,100,200.f,"2018-12-04", "2018-12-04","Chronopst");
         assertEquals(1,maj);
     }
+    
+    public static DataSource getTestDataSource() {
+        org.hsqldb.jdbc.JDBCDataSource ds = new org.hsqldb.jdbc.JDBCDataSource();
+        ds.setDatabase("jdbc:hsqldb:mem:testcase;shutdown=true");
+        ds.setUser("sa");
+        ds.setPassword("sa");
+        return ds;
+    }
+    
 }
