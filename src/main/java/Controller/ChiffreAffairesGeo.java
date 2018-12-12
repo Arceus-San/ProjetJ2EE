@@ -37,7 +37,7 @@ public class ChiffreAffairesGeo extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-		DAO dao = new DAO(DataSourceFactory.getDataSource());
+		DAO dao = (DAO) getServletContext().getAttribute("dao");
 
 		Properties resultat = new Properties();
                 

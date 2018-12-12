@@ -39,7 +39,7 @@ public class deletePurchaseOrder extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, DAOException {
-        DAO dao = new DAO(DataSourceFactory.getDataSource());
+        DAO dao = (DAO) getServletContext().getAttribute("dao");
         String ID = request.getParameter("code");
         Properties resultat = new Properties();
         

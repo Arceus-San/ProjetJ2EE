@@ -44,7 +44,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 		throws ServletException, IOException {
 
 		// Créér le DAO avec sa source de données
-		DAO dao = new DAO(DataSourceFactory.getDataSource());
+		DAO dao = (DAO) getServletContext().getAttribute("dao");;
 		Properties resultat = new Properties();
                 int customerID = (int)request.getSession(true).getAttribute("clientID");
 

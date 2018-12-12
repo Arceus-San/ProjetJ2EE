@@ -9,6 +9,7 @@ import Modele.DAO;
 import Modele.DAOException;
 import Modele.DataSourceFactory;
 import Modele.Product;
+import Modele.PurchaseOrder;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -41,17 +42,21 @@ public class AddPurchaseOrder extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, DAOException {
-        DAO dao = new DAO(DataSourceFactory.getDataSource());
+        DAO dao = (DAO) getServletContext().getAttribute("dao");
+        
 	int product_ID = Integer.parseInt(request.getParameter("code2"));
         int customerID = (int)request.getSession(true).getAttribute("clientID");
         int quantity = Integer.parseInt(request.getParameter("Quantite"));
         String companie = request.getParameter("Companie");
         System.out.println(quantity);
         
+        HashMap<Integer, PurchaseOrder> allCommandes = dao.PurchaseOrdersInfos();
+        
+        
         String message;
         //dao.addPurchaseOrder(product_ID, int customid, int prodid, int qt, float shippingcost, String sales,String shippingdate,String transporteur);
                 try {
-            dao.addPurchaseOrder(98703, customerID, product_ID, quantity, 80.6f, "2018-12-11", "2018-12-11", companie);
+            dao.addPurchaseOrder(maxID(allCommandes)+1, customerID, product_ID, quantity, 80.6f, "2018-12-11", "2018-12-11", companie);
             message = "Purchase Order ajouté";
         } catch (NumberFormatException ex) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -70,7 +75,17 @@ public class AddPurchaseOrder extends HttpServlet {
     }
 
 
-
+    private int maxID(HashMap<Integer, PurchaseOrder> allCommandes){
+        int max = 0;
+        
+        for(int id : allCommandes.keySet()){
+            if(id > max){
+                max = id;
+            }
+        }
+        
+        return max;
+    }
 
     
 
