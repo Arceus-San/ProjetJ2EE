@@ -18,13 +18,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 import org.apache.derby.tools.ij;
 
 /**
  *
  * @author pedago
  */
-// @WebListener()
+@WebListener()
 public class ApplicationListener implements ServletContextListener {
 
     @Override
