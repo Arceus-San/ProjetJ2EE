@@ -44,6 +44,8 @@ public class AddPurchaseOrder extends HttpServlet {
             throws ServletException, IOException, DAOException {
         DAO dao = (DAO) getServletContext().getAttribute("dao");
         
+        System.out.println(request.getParameter("Quantite"));
+        
 	int product_ID = Integer.parseInt(request.getParameter("code2"));
         int customerID = (int)request.getSession(true).getAttribute("clientID");
         int quantity = Integer.parseInt(request.getParameter("Quantite"));

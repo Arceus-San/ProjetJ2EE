@@ -40,10 +40,9 @@ public class deletePurchaseOrder extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, DAOException {
         DAO dao = (DAO) getServletContext().getAttribute("dao");
-        String ID = request.getParameter("code");
+        int ID = Integer.parseInt(request.getParameter("code"));
         Properties resultat = new Properties();
-        
-        dao.supprProduct(ID);
+        dao.supprPurchaseOrder(ID);
         
         try (PrintWriter out = response.getWriter()) {
             response.setContentType("application/json;charset=UTF-8");
