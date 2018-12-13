@@ -44,7 +44,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 		throws ServletException, IOException {
 
 		// Créér le DAO avec sa source de données
-		DAO dao = (DAO) getServletContext().getAttribute("dao");;
+		DAO dao = (DAO) getServletContext().getAttribute("dao");
 		Properties resultat = new Properties();
                 int customerID = (int)request.getSession(true).getAttribute("clientID");
 
@@ -56,9 +56,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                     for(int purchaseOrderID : dao.listePurchase().get(customerID)){
                         productList.add(allPurchaseOrder.get(purchaseOrderID));
                     }
-        
-                    System.out.println(productList);
-                    
+
                     resultat.put("records", productList);
 
                 } catch (DAOException ex) {

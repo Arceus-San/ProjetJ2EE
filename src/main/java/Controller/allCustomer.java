@@ -11,7 +11,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -37,24 +36,22 @@ public class allCustomer extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
                 DAO dao = (DAO) getServletContext().getAttribute("dao");
-		Properties resultat = new Properties();
 
-                try {
-                    resultat.put("records", dao.CustomersInfos());
+                int clientID = (int)request.getSession(true).getAttribute("clientID");
+                
+                try {                
 
+                    try (PrintWriter out = response.getWriter()) {
+                            // On spécifie que la servlet va générer du JSON
+                            response.setContentType("application/json;charset=UTF-8");
+                            // Générer du JSON
+                            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                            out.println(gson.toJson(dao.CustomersInfos().get(clientID)));
+                    }
+                
                 } catch (DAOException ex) {
                     Logger.getLogger(allCodes.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
-		try (PrintWriter out = response.getWriter()) {
-			// On spécifie que la servlet va générer du JSON
-			response.setContentType("application/json;charset=UTF-8");
-			// Générer du JSON
-			// Gson gson = new Gson();
-			// setPrettyPrinting pour que le JSON généré soit plus lisible
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			out.println(gson.toJson(resultat));
-		}
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

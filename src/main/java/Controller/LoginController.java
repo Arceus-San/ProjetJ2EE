@@ -58,7 +58,7 @@ public class LoginController extends HttpServlet {
                             email:jumboeagle@example.com
                             pass:1
                         */
-                        if(login != null & allIdsAndMails.get(clientID).equals(login)){
+                        if(allIdsAndMails.get(clientID).equals(login)){
                             System.out.println("CLIENT ACCESS GRANTED!");
                             request.getSession(true).setAttribute("clientID", clientID);
                             request.getRequestDispatcher("newjsp.jsp").forward(request, response);
