@@ -79,7 +79,7 @@
             }
             function showCodes3() {
                 $.ajax({
-                    url: "all",
+                    url: "allCustomer",
                     dataType: "json",
                     error: showError,
                     success: // La fonction qui traite les résultats

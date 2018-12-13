@@ -32,6 +32,14 @@
         <servlet-name>ApplicationListener</servlet-name>
         <servlet-class>Controller.ApplicationListener</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NewServlet</servlet-name>
+        <servlet-class>Controller.NewServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>allCustomer</servlet-name>
+        <servlet-class>Controller.allCustomer</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -63,6 +71,14 @@
     <servlet-mapping>
         <servlet-name>ApplicationListener</servlet-name>
         <url-pattern>/ApplicationListener</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewServlet</servlet-name>
+        <url-pattern>/NewServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>allCustomer</servlet-name>
+        <url-pattern>/allCustomer</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
