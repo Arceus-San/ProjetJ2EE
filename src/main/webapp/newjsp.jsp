@@ -228,7 +228,7 @@
                 </tr>
                 
                     <tr>
-                        <td><input id="ID" type="text" value={{id}}></td><td>{{discount_code}}</td><td>{{zip}}</td><td><input id="Name" type="text" value={{name}}></td><td><input id="adress1" type="text" value={{adress1}}></td>
+                        <td><input id="ID" type="text" value={{id}} /></td><td>{{discount_code}}</td><td>{{zip}}</td><td><input id="Name" type="text" value={{name}} /></td><td><input id="adress1" type="text" value={{adress1}} /></td>
                         <td><input id="adress2" type="text" value={{adress2}} /></td><td><input id="City" type="text" value={{city}} /></td><td><input id="State" type="text" value={{state}} /></td><th><input id="Phone" type="text" value={{phone}} /></th><th><input id="Fax" type="text" value={{fax}} /></th><th><input id="Email" type="text" value={{email}} /></th><th><input id="Credit" type="number" value={{credit_limit}} /></th><th>
                             <button onclick="Mofidcustomer()">Modifier</button>
                         </th>
