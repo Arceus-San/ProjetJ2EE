@@ -56,9 +56,7 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                     for(int purchaseOrderID : dao.listePurchase().get(customerID)){
                         productList.add(allPurchaseOrder.get(purchaseOrderID));
                     }
-        
-                    System.out.println(productList);
-                    
+                           
                     resultat.put("records", productList);
 
                 } catch (DAOException ex) {

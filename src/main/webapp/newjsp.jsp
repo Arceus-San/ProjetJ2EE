@@ -85,17 +85,10 @@
                     success: // La fonction qui traite les résultats
                             function (result) {
                                 console.log(result);
-                                var chartData = [];
-                                var h = {};
                                 // Le code source du template est dans la page
                                 var template = $('#codesTemplate3').html();
-                                for(var client in result.records) {
-                                chartData.push(result.records[client]);
-                            }
-                                h.records=chartData;
-         
-                                console.log(h);
-                                var processedTemplate = Mustache.to_html(template, h);
+                                           
+                                var processedTemplate = Mustache.to_html(template, result);
                                 // On combine le template avec le résultat de la requête
                                 $('#Codes3').html(processedTemplate);
                                
@@ -225,15 +218,12 @@
                     <th>Adress2</th><th>City</th><th>State</th><th>Phone</th><th>Fax</th><th>Email</th><th>Credit_Limit</th>
                 </tr>
                 
-                {{#records}}
                     <tr>
-                        <td><input id="ID" type="text" value={{id}}></td><td><input id="discount" type="text" value={{discount_code}}></td><td><input id="Zip" type="text" value={{zip}}></td><td><input id="Name" type="text" value={{name}}></td><td><input id="adress1" type="text" value={{adress1}}></td>
+                        <td><input id="ID" type="text" value="{{id}}"></td><td><input id="discount" type="text" value={{discount_code}}></td><td><input id="Zip" type="text" value={{zip}}></td><td><input id="Name" type="text" value={{name}}></td><td><input id="adress1" type="text" value={{adress1}}></td>
                         <td><input id="adress2" type="text" value={{adress2}}></td><td><input id="City" type="text" value={{city}}></td><td><input id="State" type="text" value={{state}}></td><th><input id="Phone" type="text" value={{phone}}></th><th><input id="Fax" type="text" value={{fax}}></th><th><input id="Email" type="text" value={{email}}></th><th><input id="Credit" type="text" value={{credit_limit}}></th><th>
-                            <button onclick="Mofidcustomer()">Commander</button>
+                            <button onclick="Mofidcustomer()">Modifier</button>
                         </th>
-                    </tr>
-                {{/records}}
-            
+                    </tr>            
             </TABLE>
             
         </script>
