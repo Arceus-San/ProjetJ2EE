@@ -467,29 +467,116 @@ public class DAO {
             
         }
     
+    
     /*
-        Modifie la commande en focntion de son numéro et des valeurs renseignées, seules les clés primaires et étrangères ne sont pas (et ne peuvent pas) être modifiées
-        */
-        public int modifPurchaseOrder(int id,int qt, float shippingcost, String sales,String shippingdate,String transporteur) throws DAOException{
-            String sql ="UPDATE PURCHASE_ORDER SET QUANTITY=?, SHIPPING_COST=?, SALES_DATE=?, SHIPPING_DATE=?, FREIGHT_COMPANY=? WHERE ORDER_NUM=?";
-            int maj=0;
-            
-            try (Connection connection = myDataSource.getConnection();
-			PreparedStatement stmt = connection.prepareStatement(sql)) {
+    Modifie la commande en focntion de son numéro et des valeurs renseignées, seules les clés primaires et étrangères ne sont pas (et ne peuvent pas) être modifiées
+    */
+    public int modifPurchaseOrder(int id,int qt, float shippingcost, String sales,String shippingdate,String transporteur) throws DAOException{
+        String sql ="UPDATE PURCHASE_ORDER SET QUANTITY=?, SHIPPING_COST=?, SALES_DATE=?, SHIPPING_DATE=?, FREIGHT_COMPANY=? WHERE ORDER_NUM=?";
+        int maj=0;
 
-                        stmt.setInt(1, qt);
-                        stmt.setFloat(2, shippingcost);
-                        stmt.setString(3, sales);
-                        stmt.setString(4, shippingdate);
-                        stmt.setString(5, transporteur);
-                        stmt.setInt(6,id);
-                        maj = stmt.executeUpdate();
-                        return maj;
-                        
-		}  catch (SQLException ex) {
-			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
-			throw new DAOException(ex.getMessage());
+        try (Connection connection = myDataSource.getConnection();
+                    PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+                    stmt.setInt(1, qt);
+                    stmt.setFloat(2, shippingcost);
+                    stmt.setString(3, sales);
+                    stmt.setString(4, shippingdate);
+                    stmt.setString(5, transporteur);
+                    stmt.setInt(6,id);
+                    maj = stmt.executeUpdate();
+                    return maj;
+
+            }  catch (SQLException ex) {
+                    Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+                    throw new DAOException(ex.getMessage());
+            }
+
+    }
+    
+    /*
+    Modifie la commande en focntion de son numéro et des valeurs renseignées, seules les clés primaires et étrangères ne sont pas (et ne peuvent pas) être modifiées
+    */
+    public int modifQuantite(int id,int qt_commande) throws DAOException{
+        String sql ="UPDATE PRODUCT SET QUANTITY_ON_HAND=? WHERE PRODUCT_ID=?";
+        String sql2="SELECT QUANTITY_ON_HAND FROM PRODUCT WHERE PRODUCT_ID=?";
+        String sql3="UPDATE PRODUCT SET AVAILABLE=? WHERE PRODUCT_ID=?";
+        int maj=-1;
+        int newvalue=-1;
+        int f=-1;
+        
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt= connection.prepareStatement(sql);
+                PreparedStatement stmt2= connection.prepareStatement(sql2);
+                PreparedStatement stmt3= connection.prepareStatement(sql3)) {
+                    
+                    stmt2.setInt(1,id);
+                    try (ResultSet rs = stmt2.executeQuery()) {
+                    while (rs.next()) { 
+			int qt =rs.getInt("QUANTITY_ON_HAND");
+                        maj=qt;
+                    }
+                    
+                    newvalue=maj-qt_commande;
+                    stmt.setInt(1,newvalue);
+                    stmt.setInt(2,id);
+                    f+= stmt.executeUpdate();
+                    if(newvalue==0){
+                        stmt3.setBoolean(1, false);
+                        stmt3.setInt(2,id);
+                        f+= stmt3.executeUpdate();
+                    }
 		}
-            
-        }
+                return f;
+
+            }  catch (SQLException ex) {
+                    Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+                    throw new DAOException(ex.getMessage());
+            }
+
+    }
+    
+    /*
+    Modifie la commande en focntion de son numéro et des valeurs renseignées, seules les clés primaires et étrangères ne sont pas (et ne peuvent pas) être modifiées
+    */
+    public int modifQuantiteSupprCommande(int id,int qt_commande) throws DAOException{
+        String sql ="UPDATE PRODUCT SET QUANTITY_ON_HAND=? WHERE PRODUCT_ID=?";
+        String sql2="SELECT QUANTITY_ON_HAND FROM PRODUCT WHERE PRODUCT_ID=?";
+        String sql3="UPDATE PRODUCT SET AVAILABLE=? WHERE PRODUCT_ID=?";
+        int maj=-1;
+        int newvalue=-1;
+        int f=-1;
+        
+        try (Connection connection = myDataSource.getConnection();
+                PreparedStatement stmt= connection.prepareStatement(sql);
+                PreparedStatement stmt2= connection.prepareStatement(sql2);
+                PreparedStatement stmt3= connection.prepareStatement(sql3)) {
+                    
+                    stmt2.setInt(1,id);
+                    try (ResultSet rs = stmt2.executeQuery()) {
+                    while (rs.next()) { 
+			int qt =rs.getInt("QUANTITY_ON_HAND");
+                        maj=qt;
+                    }
+                    
+                    newvalue=maj+qt_commande;
+                    stmt.setInt(1,newvalue);
+                    stmt.setInt(2,id);
+                    f+= stmt.executeUpdate();
+                    if(newvalue>0){
+                        stmt3.setBoolean(1, true);
+                        stmt3.setInt(2,id);
+                        f+= stmt3.executeUpdate();
+                    }
+		}
+                return f;
+
+            }  catch (SQLException ex) {
+                    Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
+                    throw new DAOException(ex.getMessage());
+            }
+
+    }
+        
+        
 }

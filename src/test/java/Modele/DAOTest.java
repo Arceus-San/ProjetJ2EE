@@ -282,6 +282,55 @@ public class DAOTest {
         assertEquals(1,maj);
     }
     
+    /**
+     * Test of modifQuantite method, of class DAO.
+     * @throws Modele.DAOException
+     */
+    @Test
+    public void testmodifQuantite() throws DAOException {
+        int maj = myDAO.modifQuantite(980005,400);
+        HashMap<Integer,Product> produits = myDAO.productsInfos();
+        assertEquals(0,maj);
+    }
+    
+    /**
+     * Test of modifQuantite method, of class DAO.
+     * @throws Modele.DAOException
+     */
+    @Test
+    public void testmodifQuantiteDevient0() throws DAOException {
+        int maj = myDAO.modifQuantite(980005,500);
+        HashMap<Integer,Product> produits = myDAO.productsInfos();
+        assertEquals(1,maj);
+    }
+    
+    /**
+     * Test of modifQuantiteSupprCommande method, of class DAO.
+     * @throws Modele.DAOException
+     */
+    @Test
+    public void testmodifQuantiteSupprCommande() throws DAOException {
+        int maj = myDAO.modifQuantiteSupprCommande(980005,500);
+        HashMap<Integer,Product> produits = myDAO.productsInfos();
+        System.out.println(produits.get(980005).getQuantity());
+        assertEquals(1,maj);
+    }
+    
+    /**
+     * Test of modifQuantiteSupprCommande method, of class DAO.
+     * @throws Modele.DAOException
+     */
+    @Test
+    public void testmodifQuantiteSupprCommandeQtEtait0() throws DAOException {
+        int maj = myDAO.modifQuantiteSupprCommande(958888,1000);
+        HashMap<Integer,Product> produits = myDAO.productsInfos();
+        System.out.println(produits.get(958888).getQuantity());
+        System.out.println(produits.get(958888).getAvailable());
+        assertEquals(1,maj);
+    }
+    
+    
+    
     public static DataSource getTestDataSource() {
         org.hsqldb.jdbc.JDBCDataSource ds = new org.hsqldb.jdbc.JDBCDataSource();
         ds.setDatabase("jdbc:hsqldb:mem:testcase;shutdown=true");
