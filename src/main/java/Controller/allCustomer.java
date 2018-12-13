@@ -47,6 +47,7 @@ public class allCustomer extends HttpServlet {
                             // Générer du JSON
                             Gson gson = new GsonBuilder().setPrettyPrinting().create();
                             out.println(gson.toJson(dao.CustomersInfos().get(clientID)));
+                            
                     }
                 
                 } catch (DAOException ex) {

@@ -91,7 +91,7 @@
 
                                 var processedTemplate = Mustache.to_html(template, result);
                                 // On combine le template avec le résultat de la requête
-                                $('#Codes3').html(processedTemplate);
+                                $('#Codes2').html(processedTemplate);
                                 
                                 
                             }
@@ -181,7 +181,7 @@
         <a href="#" onclick="showCodes2()">passer une commande</a>
         <a href="#" onclick="showCodes3()">changer ses données</a>
         <div id="Codes2"></div>
-        <div id="Codes3"></div>
+
 
 
         <!-- Le template qui sert à formatter la liste des codes -->
