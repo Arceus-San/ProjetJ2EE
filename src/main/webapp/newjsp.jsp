@@ -97,8 +97,8 @@
                                 console.log(h);
                                 var processedTemplate = Mustache.to_html(template, h);
                                 // On combine le template avec le résultat de la requête
-                                $('#Codes3').html(processedTemplate);
-                               
+                                $('#Codes2').html(processedTemplate);
+                                
                                 
                             }
                 });
@@ -142,8 +142,6 @@
             
         function Mofidcustomer() {
                 var id = $('#ID').val();
-                var discount = $('#discount').val();
-                var zip = $('#Zip').val();
                 var name = $('#Name').val();
                 var adress1 = $('#adress1').val();
                 var adress2 = $('#adress2').val();
@@ -156,11 +154,11 @@
                 $.ajax({
                     url: "ModifCustomer",
                     // serialize() renvoie tous les paramètres saisis dans le formulaire
-                    data: {"code2": Code, "Quantite" : quantite , "Companie" : companie},
+                    data: {"ID": id, "Name" : name, "Adress1" : adress1 , "Adress2" : adress2, "City" : city , "State" : state, "Phone" : phone ,"Fax" : fax ,"Email" : email , "Credit" : credit},
                     dataType: "json",
                     success: // La fonction qui traite les résultats
                             function (result) {
-                                showCodes();
+                                showCodes3();
                                 console.log(result);
                             },
                     error: showError
@@ -168,6 +166,7 @@
                 return false;
             }
 
+               
             // Fonction qui traite les erreurs de la requête
             function showError(xhr, status, message) {
                 alert("Erreur: " + status + " : " + message);
@@ -178,10 +177,19 @@
 <h1>Edition des taux de remise (AJAX)</h1>
          <!-- La zone où les résultats vont s'afficher -->
         <div id="codes"></div>
-        <a href='#' onclick="showCodes2()">Passer une nouvelle commande</a>
-        <a href='#' onclick="showCodes3()">Changer ses Données</a>
+        
+        
+        <input name="g" type="radio" onclick="showCodes2()" value="Passer une nouvelle commande">
+        <label for="Passer une nouvelle commande">Passer une nouvelle commande</label>
+
+        <input name="g" type="radio" onclick="showCodes3()" value="Changer ses Données">
+        <label for="Changer ses Données">Changer ses Données</label>
+
+
         <div id="Codes2"></div>
-        <div id="Codes3"></div>
+
+
+
         <!-- Le template qui sert à formatter la liste des codes -->
         <script id="codesTemplate" type="text/template">
             <TABLE border=2>
@@ -222,14 +230,14 @@
             
                 <tr>
                     <th>Son ID</th><th>Discoun_Code</th><th>Zip</th><th>Name</th><th>Adress1</th>
-                    <th>Adress2</th><th>City</th><th>State</th><th>Phone</th><th>Fax</th><th>Email</th><th>Credit_Limit</th>
+                    <th>Adress2</th><th>City</th><th>State</th><th>Phone</th><th>Fax</th><th>Email</th><th>Credit_Limit</th><th></th>
                 </tr>
                 
                 {{#records}}
                     <tr>
-                        <td><input id="ID" type="text" value={{id}}></td><td><input id="discount" type="text" value={{discount_code}}></td><td><input id="Zip" type="text" value={{zip}}></td><td><input id="Name" type="text" value={{name}}></td><td><input id="adress1" type="text" value={{adress1}}></td>
-                        <td><input id="adress2" type="text" value={{adress2}}></td><td><input id="City" type="text" value={{city}}></td><td><input id="State" type="text" value={{state}}></td><th><input id="Phone" type="text" value={{phone}}></th><th><input id="Fax" type="text" value={{fax}}></th><th><input id="Email" type="text" value={{email}}></th><th><input id="Credit" type="text" value={{credit_limit}}></th><th>
-                            <button onclick="Mofidcustomer()">Commander</button>
+                        <td><input id="ID" type="text" value={{id}} /></td><td>{{discount_code}}</td><td>{{zip}}</td><td><input id="Name" type="text" value={{name}} /></td><td><input id="adress1" type="text" value={{adress1}} /></td>
+                        <td><input id="adress2" type="text" value={{adress2}} /></td><td><input id="City" type="text" value={{city}} /></td><td><input id="State" type="text" value={{state}} /></td><th><input id="Phone" type="text" value={{phone}} /></th><th><input id="Fax" type="text" value={{fax}} /></th><th><input id="Email" type="text" value={{email}} /></th><th><input id="Credit" type="number" value={{credit_limit}} /></th><th>
+                            <button onclick="Mofidcustomer()">Modifier</button>
                         </th>
                     </tr>
                 {{/records}}
