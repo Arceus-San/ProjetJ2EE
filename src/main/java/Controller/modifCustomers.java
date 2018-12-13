@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author guillaume
  */
-public class ModifCustomer extends HttpServlet {
+@WebServlet(name = "modifCustomers", urlPatterns = {"/modifCustomers"})
+public class modifCustomers extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,15 +37,15 @@ public class ModifCustomer extends HttpServlet {
             throws ServletException, IOException, DAOException {
             DAO dao = (DAO) getServletContext().getAttribute("dao");
             int ID = Integer.parseInt(request.getParameter("ID"));
-            int credit = Integer.parseInt(request.getParameter("Credit"));
             String name= request.getParameter("Name");
-            String addressline1= request.getParameter("adress1");
-            String addressline2= request.getParameter("adress2");
+            String addressline1= request.getParameter("Adress1");
+            String addressline2= request.getParameter("Adress2");
             String city= request.getParameter("City");
             String state= request.getParameter("State");
             String phone= request.getParameter("Phone");
             String fax= request.getParameter("Fax");
             String email= request.getParameter("Email");
+            int credit = Integer.parseInt(request.getParameter("Credit"));
             dao.modifCustomer(ID, name, addressline1, addressline2, city, state, phone, fax, email, credit);
     }
 
@@ -62,7 +64,7 @@ public class ModifCustomer extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (DAOException ex) {
-            Logger.getLogger(ModifCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(modifCustomers.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -80,7 +82,7 @@ public class ModifCustomer extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (DAOException ex) {
-            Logger.getLogger(ModifCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(modifCustomers.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

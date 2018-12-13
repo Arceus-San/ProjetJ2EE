@@ -91,7 +91,7 @@
 
                                 var processedTemplate = Mustache.to_html(template, result);
                                 // On combine le template avec le résultat de la requête
-                                $('#Codes2').html(processedTemplate);
+                                $('#Codes3').html(processedTemplate);
                                 
                                 
                             }
@@ -134,8 +134,7 @@
                 return false;
             }
             
-        function Mofidcustomer() {
-                var id = $('#ID').val();
+        function Mofidcustomer(id) {
                 var name = $('#Name').val();
                 var adress1 = $('#adress1').val();
                 var adress2 = $('#adress2').val();
@@ -145,9 +144,9 @@
                 var fax = $('#Fax').val();
                 var email = $('#Email').val();
                 var credit = $('#Credit').val();
+                console.log(adress1);
                 $.ajax({
-                    url: "ModifCustomer",
-                    // serialize() renvoie tous les paramètres saisis dans le formulaire
+                    url: "modifCustomers",
                     data: {"ID": id, "Name" : name, "Adress1" : adress1 , "Adress2" : adress2, "City" : city , "State" : state, "Phone" : phone ,"Fax" : fax ,"Email" : email , "Credit" : credit},
                     dataType: "json",
                     success: // La fonction qui traite les résultats
@@ -162,7 +161,7 @@
 
                
             // Fonction qui traite les erreurs de la requête
-            function showError(xhr, status, message) {
+            function showError( status, message) {
                 alert("Erreur: " + status + " : " + message);
             }
 
@@ -173,15 +172,16 @@
         <div id="codes"></div>
         
         
-        <input name="g" type="radio" onclick="showCodes2()" value="Passer une nouvelle commande">
+        <!--<input name="g" type="radio" onclick="showCodes2()" value="Passer une nouvelle commande">
         <label for="Passer une nouvelle commande">Passer une nouvelle commande</label>
 
         <input name="g" type="radio" onclick="showCodes3()" value="Changer ses Données">
-        <label for="Changer ses Données">Changer ses Données</label>
+        <label for="Changer ses Données">Changer ses Données</label>-->
 
-
+        <a href="#" onclick="showCodes2()">passer une commande</a>
+        <a href="#" onclick="showCodes3()">changer ses données</a>
         <div id="Codes2"></div>
-
+        <div id="Codes3"></div>
 
 
         <!-- Le template qui sert à formatter la liste des codes -->
@@ -228,10 +228,9 @@
                 </tr>
                 
                     <tr>
-                        <td><input id="ID" type="text" value={{id}} /></td><td>{{discount_code}}</td><td>{{zip}}</td><td><input id="Name" type="text" value={{name}} /></td><td><input id="adress1" type="text" value={{adress1}} /></td>
-                        <td><input id="adress2" type="text" value={{adress2}} /></td><td><input id="City" type="text" value={{city}} /></td><td><input id="State" type="text" value={{state}} /></td><th><input id="Phone" type="text" value={{phone}} /></th><th><input id="Fax" type="text" value={{fax}} /></th><th><input id="Email" type="text" value={{email}} /></th><th><input id="Credit" type="number" value={{credit_limit}} /></th><th>
-                            <button onclick="Mofidcustomer()">Modifier</button>
-                        </th>
+                        <td>{{id}}</td><td>{{discount_code}}</td><td>{{zip}}</td><td><input id="Name" type="text" value={{name}} /></td><td>{{adress1}}</td>
+                        <td>{{adress2}}</td><td><input id="City" type="text" value={{city}} /></td><td><input id="State" type="text" value={{state}} /></td><th><input id="Phone" type="text" value={{phone}} /></th><th><input id="Fax" type="text" value={{fax}} /></th><th><input id="Email" type="text" value={{email}} /></th><th><input id="Credit" type="number" value={{credit_limit}} /></th>
+                        <th><button onclick="Mofidcustomer('{{id}}')">Modifier</button></th>
                     </tr>
             
             </TABLE>
