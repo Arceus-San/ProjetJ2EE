@@ -13,6 +13,10 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,15 +43,31 @@ public class deletePurchaseOrder extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, DAOException {
-        DAO dao = (DAO) getServletContext().getAttribute("dao");
-        int ID = Integer.parseInt(request.getParameter("code"));
+            throws ServletException, IOException{
+        
+        String message;
         Properties resultat = new Properties();
-        PurchaseOrder codeClient = dao.PurchaseOrdersInfos().get(ID);
-        System.out.println(codeClient.getProductId()+" "+codeClient.getQuantity());
-        dao.modifQuantiteSupprCommande(codeClient.getProductId(), codeClient.getQuantity());
-        dao.supprPurchaseOrder(ID);
+        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	Date today = new Date();
+        
+        try{
+            DAO dao = (DAO) getServletContext().getAttribute("dao");
+            int ID = Integer.parseInt(request.getParameter("code"));
+            PurchaseOrder codeClient = dao.PurchaseOrdersInfos().get(ID);
+            if(today.before(dateFormat.parse(codeClient.getSalesDate()))){
+                message = "Votre commande a bien été effacée";
+                dao.modifQuantiteSupprCommande(codeClient.getProductId(), codeClient.getQuantity());
+                dao.supprPurchaseOrder(ID);
+            }else{
+                message = "Votre commande a déjà été expédiée. Vous ne pouvez donc pas l'effacer.";
+            }
 
+        }catch(DAOException | ParseException e){
+            message = e.getMessage();
+        }
+
+        resultat.put("message", message);
         
         try (PrintWriter out = response.getWriter()) {
             response.setContentType("application/json;charset=UTF-8");
@@ -69,11 +89,7 @@ public class deletePurchaseOrder extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (DAOException ex) {
-            Logger.getLogger(deletePurchaseOrder.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -87,11 +103,7 @@ public class deletePurchaseOrder extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (DAOException ex) {
-            Logger.getLogger(deletePurchaseOrder.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

@@ -78,6 +78,7 @@
                   <br/>
                 </ul>
         </div>
+        <h4>${error}</h4>
         <form method='POST'>
             <fieldset >
                 <legend> Identifiants : </legend>  

@@ -14,8 +14,12 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -53,10 +57,13 @@ public class AddPurchaseOrder extends HttpServlet {
                
         String message;
         
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	Date today = new Date();
+        
         try {
             dao.modifQuantite(product_ID, quantity);
-            dao.addPurchaseOrder(maxID(allCommandes)+1, customerID, product_ID, quantity, 80.6f, "2018-12-11", "2018-12-11", companie);
-            message = "Purchase Order ajouté";
+            dao.addPurchaseOrder(maxID(allCommandes)+1, customerID, product_ID, quantity, Math.round(new Random().nextFloat()*10000f)/100f, dateFormat.format(today), dateFormat.format(today), companie);
+            message = "Votre commande a bien été enregistré";
         } catch (NumberFormatException ex) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             message = ex.getMessage();

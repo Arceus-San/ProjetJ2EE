@@ -61,8 +61,8 @@ public class LoginController extends HttpServlet {
                            request.setAttribute("error", "Identifiant ou code incorrect");
                            request.getRequestDispatcher("Accueil.jsp").forward(request, response);
                         }
-                    }catch(DAOException | NumberFormatException e){
-                           request.setAttribute("error", "Veuillez rentrer un identifiant et un code valide");
+                    }catch(DAOException | NumberFormatException | NullPointerException e){
+                           request.setAttribute("error", "Identifiant ou code incorrect");
                            request.getRequestDispatcher("Accueil.jsp").forward(request, response); 
                     }
                     

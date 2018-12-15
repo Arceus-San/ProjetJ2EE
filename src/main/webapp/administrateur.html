@@ -235,12 +235,17 @@ and open the template in the editor.
         <br/>
         <form id='codeForm' style="text-align:center;">
         <label for="start">Date debut :</label>
-        <input name="dateDebut" type="date" id="start" 
-            value="2018-07-22">
+        <input name="dateDebut" type="date" id="start">
         <label for="fin">Date fin :</label>
-        <input name="dateFin" type="date" id="fin" 
-            value="2018-07-22">  
+        <input name="dateFin" type="date" id="fin">  
         </form>
+        
+        <script>
+        var today = new Date();
+        var formattedToday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        $('#start').val(formattedToday);
+        $('#fin').val(formattedToday);
+        </script>
     </fieldset>
         <input name="g" type="radio" onclick="showCodes()" value="Changer ses Données">
         <label>Table Produit</label>
