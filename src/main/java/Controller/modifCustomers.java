@@ -7,8 +7,10 @@ package Controller;
 
 import Modele.DAO;
 import Modele.DAOException;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -21,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author guillaume
  */
-@WebServlet(name = "modifCustomers", urlPatterns = {"/modifCustomers"})
+//@WebServlet(name = "modifCustomers", urlPatterns = {"/modifCustomers"})
 public class modifCustomers extends HttpServlet {
 
     /**
@@ -46,7 +48,30 @@ public class modifCustomers extends HttpServlet {
             String fax= request.getParameter("Fax");
             String email= request.getParameter("Email");
             int credit = Integer.parseInt(request.getParameter("Credit"));
+            
+            System.out.print(ID+" ");
+            System.out.print(name+" ");
+            System.out.print(addressline1+" ");
+            System.out.print(addressline2+" ");
+            System.out.print(city+" ");
+            System.out.print(state+" ");
+            System.out.print(phone+" ");
+            System.out.print(fax+" ");
+            System.out.print(email+" ");
+            System.out.print(credit+" ");
+            Properties resultat = new Properties();
+            
             dao.modifCustomer(ID, name, addressline1, addressline2, city, state, phone, fax, email, credit);
+                       
+            resultat.put("message", "Vos informations ont bien été mises à jour");
+            
+            try (PrintWriter out = response.getWriter()) {
+                response.setContentType("application/json;charset=UTF-8");
+                Gson gson = new Gson();
+                out.println(gson.toJson(resultat));
+            }
+            
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

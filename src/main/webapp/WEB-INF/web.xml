@@ -33,8 +33,8 @@
         <servlet-class>Controller.ApplicationListener</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>NewServlet</servlet-name>
-        <servlet-class>Controller.NewServlet</servlet-class>
+        <servlet-name>modifCustomers</servlet-name>
+        <servlet-class>Controller.modifCustomers</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>allCustomer</servlet-name>
@@ -73,8 +73,8 @@
         <url-pattern>/ApplicationListener</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>NewServlet</servlet-name>
-        <url-pattern>/NewServlet</url-pattern>
+        <servlet-name>modifCustomers</servlet-name>
+        <url-pattern>/modifCustomers</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>allCustomer</servlet-name>
