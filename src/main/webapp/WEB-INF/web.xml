@@ -40,6 +40,10 @@
         <servlet-name>allCustomer</servlet-name>
         <servlet-class>Controller.allCustomer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>modifProducts</servlet-name>
+        <servlet-class>Controller.modifProducts</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -79,6 +83,10 @@
     <servlet-mapping>
         <servlet-name>allCustomer</servlet-name>
         <url-pattern>/allCustomer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>modifProducts</servlet-name>
+        <url-pattern>/modifProducts</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

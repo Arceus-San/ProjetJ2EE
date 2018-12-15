@@ -15,7 +15,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,8 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author guillaume
  */
-@WebServlet(name = "modifCustomers", urlPatterns = {"/modifCustomers"})
-public class modifCustomers extends HttpServlet {
+public class modifProducts extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,16 +38,12 @@ public class modifCustomers extends HttpServlet {
             throws ServletException, IOException, DAOException {
             DAO dao = (DAO) getServletContext().getAttribute("dao");
             int ID = Integer.parseInt(request.getParameter("ID"));
-            String name= request.getParameter("Name");
-            String addressline1= request.getParameter("Adress1");
-            String addressline2= request.getParameter("Adress2");
-            String city= request.getParameter("City");
-            String state= request.getParameter("State");
-            String phone= request.getParameter("Phone");
-            String fax= request.getParameter("Fax");
-            String email= request.getParameter("Email");
-            int credit = Integer.parseInt(request.getParameter("Credit"));
-            dao.modifCustomer(ID, name, addressline1, addressline2, city, state, phone, fax, email, credit);
+            float cost= Float.parseFloat(request.getParameter("Cost"));
+            int quantity= Integer.parseInt(request.getParameter("Quantity"));
+            float markup= Float.parseFloat(request.getParameter("Markup"));
+            String available= request.getParameter("Available");
+            String description= request.getParameter("Descrition");
+            dao.modifProduct(ID, cost, quantity, markup, available, description);           
             Properties resultat = new Properties();
             try (PrintWriter out = response.getWriter()) {
             // On spécifie que la servlet va générer du JSON
@@ -60,7 +54,6 @@ public class modifCustomers extends HttpServlet {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             out.println(gson.toJson(resultat));
         }
-    
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -78,7 +71,7 @@ public class modifCustomers extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (DAOException ex) {
-            Logger.getLogger(modifCustomers.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(modifProducts.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -96,7 +89,7 @@ public class modifCustomers extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (DAOException ex) {
-            Logger.getLogger(modifCustomers.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(modifProducts.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
