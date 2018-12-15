@@ -154,18 +154,16 @@ and open the template in the editor.
                             }
                 });
             }
-            function ModifProduct() {
-                var id = $('#ID').val();
-                var cost = $('#Cost').val();
-                var quantity = $('#Quantity').val();
-                var markup = $('#Markup').val();
-                var available = $('#Available').val();
-                var description = $('#Description').val();
+            function ModifProduct(id) {
+                var cost = $('#Cost-'+id).val();
+                var quantity = $('#Quantity-'+id).val();
+                var markup = $('#Markup-'+id).val();
+                var description = $('#Description-'+id).val();
                 console.log(cost);
                 
                 $.ajax({
                     url: "modifProducts",
-                    data: {"ID": id, "Cost" : cost, "Quantity" : quantity , "Markup" : markup, "Available" : available ,"Description" : description},
+                    data: {"ID": id, "Cost" : cost, "Quantity" : quantity , "Markup" : markup, "Description" : description},
                     dataType: "json",
                     success: // La fonction qui traite les résultats
                             function (result) {
@@ -182,7 +180,18 @@ and open the template in the editor.
 		function showError(xhr, status, message) {
 			alert("Erreur: " + status + " : " + message);
 		}
-
+               
+        function disconnect(){
+            $.ajax({
+                data: {"action": "deconnexion"},
+                success: function(){
+                            window.location.href = "LoginController";
+                            console.log("Déconnexion...");
+                        }
+            });
+            
+            return false;
+        }
 	</script>
 <style>
         .bas{
@@ -209,7 +218,7 @@ and open the template in the editor.
         <h1> BIENVENUE </h1>
         </Div>
         <div class="navbar" style="width: 100%;background-color: #555;overflow:auto;" >
-            <a  href="Accueil.jsp" name="home" style="float: left;padding: 12px;color: white;text-decoration: none;font-size: 17px;"> Home</a>
+            <a  onclick="disconnect()" href="#" name="home" style="float: left;padding: 12px;color: white;text-decoration: none;font-size: 17px;"> Home</a>
             <a name="client"  style="float: left;padding: 12px;color: white;text-decoration: none;font-size: 17px;"> Client</a>
             <a class="active" name="admin"  style="float: left;padding: 12px;color: white;text-decoration: none;font-size: 17px;"> Admin</a> 
         </div>
@@ -276,9 +285,9 @@ and open the template in the editor.
                 
                 {{#records}}
                     <tr>
-                        <td><input id="ID" type="number" value={{id}} /></td><td>{{manuf_id}}</td><td>{{prod_code}}</td><td><input id="Cost" type="number" value={{cost}} /></td><td><input id="Quantity" type="number" value={{quantity}} /></td>
-                        <td><input id="Markup" type="number" value={{markup}} /></td><td><input id="Available" type="text" value={{available}} /></td><td><input id="Description" type="text" value={{description}} /></td><th>
-                            <button onclick="ModifProduct()">Modifier</button>
+                        <td>{{id}}</td><td>{{manuf_id}}</td><td>{{prod_code}}</td><td><input id="Cost-{{id}}" type="number"  min="0" value="{{cost}}" /></td><td><input id="Quantity-{{id}}" type="number" min="0" value="{{quantity}}" /></td>
+                        <td><input id="Markup-{{id}}" type="number" min="0" value="{{markup}}" /></td><td>{{available}}</td><td><input id="Description-{{id}}" type="text" value="{{description}}"/></td><th>
+                        <button onclick="ModifProduct({{id}})">Modifier</button>
                         </th>
                     </tr>
                 {{/records}}

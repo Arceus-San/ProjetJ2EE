@@ -41,9 +41,14 @@ public class modifProducts extends HttpServlet {
             float cost= Float.parseFloat(request.getParameter("Cost"));
             int quantity= Integer.parseInt(request.getParameter("Quantity"));
             float markup= Float.parseFloat(request.getParameter("Markup"));
-            String available= request.getParameter("Available");
+            String available;
             String description= request.getParameter("Description");
-            dao.modifProduct(ID, cost, quantity, markup, available, description);           
+            if(quantity>0){
+                available="TRUE";
+            }else{
+                available="FALSE";
+            }
+            dao.modifProduct(ID, cost, quantity, markup, available, description);   
             Properties resultat = new Properties();
             try (PrintWriter out = response.getWriter()) {
             // On spécifie que la servlet va générer du JSON

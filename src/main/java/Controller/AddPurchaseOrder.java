@@ -43,21 +43,18 @@ public class AddPurchaseOrder extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, DAOException {
         DAO dao = (DAO) getServletContext().getAttribute("dao");
-        
-        System.out.println(request.getParameter("Quantite"));
-        
+                
 	int product_ID = Integer.parseInt(request.getParameter("code2"));
         int customerID = (int)request.getSession(true).getAttribute("clientID");
         int quantity = Integer.parseInt(request.getParameter("Quantite"));
         String companie = request.getParameter("Companie");
-        System.out.println(quantity);
         
         HashMap<Integer, PurchaseOrder> allCommandes = dao.PurchaseOrdersInfos();
-        
-        
+               
         String message;
-        //dao.addPurchaseOrder(product_ID, int customid, int prodid, int qt, float shippingcost, String sales,String shippingdate,String transporteur);
-                try {
+        
+        try {
+            dao.modifQuantite(product_ID, quantity);
             dao.addPurchaseOrder(maxID(allCommandes)+1, customerID, product_ID, quantity, 80.6f, "2018-12-11", "2018-12-11", companie);
             message = "Purchase Order ajouté";
         } catch (NumberFormatException ex) {

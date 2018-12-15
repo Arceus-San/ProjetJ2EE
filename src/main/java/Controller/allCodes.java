@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,15 +50,19 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
                 int customerID = (int)request.getSession(true).getAttribute("clientID");
 
                 try {
+                    List idCommandesClient = dao.listePurchase().get(customerID);
                     HashMap<Integer,PurchaseOrder> allPurchaseOrder  =  dao.PurchaseOrdersInfos();
-        
                     ArrayList<PurchaseOrder> productList = new ArrayList<>();
 
-                    for(int purchaseOrderID : dao.listePurchase().get(customerID)){
-                        productList.add(allPurchaseOrder.get(purchaseOrderID));
+                    if(idCommandesClient != null){
+                        for(int purchaseOrderID : dao.listePurchase().get(customerID)){
+                            productList.add(allPurchaseOrder.get(purchaseOrderID));
+                        }
+                        
                     }
-
                     resultat.put("records", productList);
+
+                    
 
                 } catch (DAOException ex) {
                     Logger.getLogger(allCodes.class.getName()).log(Level.SEVERE, null, ex);

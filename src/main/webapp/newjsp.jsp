@@ -64,8 +64,11 @@
                                 // Le code source du template est dans la page
                                 var template = $('#codesTemplate2').html();
                                 for(var client in result.records) {
-                                chartData.push(result.records[client]);
-                            }
+                                    var res = result.records[client];
+                                    if(res.quantity > 0){
+                                        chartData.push(res);
+                                    }
+                                }
                                 h.records=chartData;
          
                                 console.log(h);
@@ -102,8 +105,8 @@
 
             // Ajouter un code
             function addCode(Code) {
-                var quantite=  $('#Quantite').val();
-                var companie = $('#Companie').val();
+                var quantite=  $('#Quantite-'+Code).val();
+                var companie = $('#Companie-'+Code).val();
                 $.ajax({
                     url: "AddPurchaseOrder",
                     // serialize() renvoie tous les paramètres saisis dans le formulaire
@@ -112,6 +115,7 @@
                     success: // La fonction qui traite les résultats
                             function (result) {
                                 showCodes();
+                                showCodes2();
                                 console.log(result);
                             },
                     error: showError
@@ -128,6 +132,7 @@
                     success: 
                             function (result) {
                                 showCodes();
+                                showCodes2();
                             },
                     error: showError
                 });
@@ -144,15 +149,23 @@
                 var fax = $('#Fax').val();
                 var email = $('#Email').val();
                 var credit = $('#Credit').val();
-                console.log(adress1);
+                console.log(id, name,adress1, adress2, city, state, phone, fax, email, credit);
                 $.ajax({
                     url: "modifCustomers",
-                    data: {"ID": id, "Name" : name, "Adress1" : adress1 , "Adress2" : adress2, "City" : city , "State" : state, "Phone" : phone ,"Fax" : fax ,"Email" : email , "Credit" : credit},
                     dataType: "json",
+                    data: {"ID": id,
+                        "Name" : name,
+                        "Adress1" : adress1 ,
+                        "Adress2" : adress2,
+                        "City" : city ,
+                        "State" : state,
+                        "Phone" : phone ,
+                        "Fax" : fax ,
+                        "Email" : email ,
+                        "Credit" : credit},
                     success: // La fonction qui traite les résultats
-                            function (result) {
+                            function () {
                                 showCodes3();
-                                console.log(result);
                             },
                     error: showError
                 });
@@ -161,8 +174,8 @@
 
                
             // Fonction qui traite les erreurs de la requête
-            function showError( status, message) {
-                alert("Erreur: " + status + " : " + message);
+            function showError(xhr, status, message) {
+                alert("Erreur: " + xhr.status + " : " + message);
             }
 
         </script>
@@ -172,20 +185,21 @@
         <div id="codes"></div>
         
         
-        <!--<input name="g" type="radio" onclick="showCodes2()" value="Passer une nouvelle commande">
+        <input name="g" type="radio" onclick="showCodes2()" value="Passer une nouvelle commande">
         <label for="Passer une nouvelle commande">Passer une nouvelle commande</label>
 
         <input name="g" type="radio" onclick="showCodes3()" value="Changer ses Données">
-        <label for="Changer ses Données">Changer ses Données</label>-->
+        <label for="Changer ses Données">Changer ses Données</label>
 
-        <a href="#" onclick="showCodes2()">passer une commande</a>
-        <a href="#" onclick="showCodes3()">changer ses données</a>
         <div id="Codes2"></div>
 
 
 
         <!-- Le template qui sert à formatter la liste des codes -->
         <script id="codesTemplate" type="text/template">
+            {{^records}}
+            Vous n'avez aucune commande
+            {{/records}}
             <TABLE border=2>
             <tr><th>Numero</th><th>Customer_id</th><th>Product_id</th><th>Quantity</th><th>Shipping_cost</th><th>Sales_date</th><th>Shipping_date</th><th>freight_company</th></tr>
             {{! Pour chaque enregistrement }}
@@ -193,24 +207,25 @@
                 {{! Une ligne dans la table }}
                 <TR><TD>{{order_num}}</TD><TD>{{customer_id}}</TD><TD>{{product_id}}</TD><TD>{{quantity}}</TD><TD>{{shipping_cost}}</TD><TD>{{sales_date}}</TD><TD>{{shipping_date}}</TD><TD>{{freight_company}}</TD><TD><button onclick="deleteCode('{{order_num}}')">Supprimer</button></TD></TR>
             {{/records}}
+           
             </TABLE>
+            
         </script>
     <script id="codesTemplate2" type="text/template">
-                <label>Quantite<input id="Quantite" type="number" /></label>
-                <label>Companie<input id="Companie" type="text"/></label>
             <TABLE border=2>
 
                 <tr>
                     <th>Numero du produit</th><th>Numero du fournisseur</th><th>Code du produit</th><th>Prix</th><th>Quantité disponible</th>
-                    <th>Balisage</th><th>Disponible</th><th>Description</th><th>Action</th>
+                    <th>Balisage</th><th>Disponible</th><th>Description</th><th>Quantité</th><th>Companie</th>
                 </tr>
                 
                 {{#records}}
                     <tr>
                         <td>{{id}}</td><td>{{manuf_id}}</td><td>{{prod_code}}</td><td>{{cost}}</td><td>{{quantity}}</td>
-                        <td>{{markup}}</td><td>{{available}}</td><td>{{description}}</td><th>
-                            <button onclick="addCode('{{id}}')">Commander</button>
-                        </th>
+                        <td>{{markup}}</td><td>{{available}}</td><td>{{description}}</td>
+                        <td><input id="Quantite-{{id}}" type="number" min="1" max="{{quantity}}"></td>
+                        <td><input id="Companie-{{id}}" type="text"></td>
+                        <td><button onclick="addCode('{{id}}')">Commander</button></td>
                     </tr>
                 {{/records}}
             
@@ -223,14 +238,14 @@
             <TABLE border=2>
             
                 <tr>
-                    <th>Son ID</th><th>Discoun_Code</th><th>Zip</th><th>Name</th><th>Adress1</th>
+                    <th>Son ID</th><th>Discount_Code</th><th>Zip</th><th>Name</th><th>Adress1</th>
                     <th>Adress2</th><th>City</th><th>State</th><th>Phone</th><th>Fax</th><th>Email</th><th>Credit_Limit</th><th></th>
                 </tr>
                 
                     <tr>
-                        <td>{{id}}</td><td>{{discount_code}}</td><td>{{zip}}</td><td><input id="Name" type="text" value={{name}} /></td><td>{{adress1}}</td>
-                        <td>{{adress2}}</td><td><input id="City" type="text" value={{city}} /></td><td><input id="State" type="text" value={{state}} /></td><th><input id="Phone" type="text" value={{phone}} /></th><th><input id="Fax" type="text" value={{fax}} /></th><th><input id="Email" type="text" value={{email}} /></th><th><input id="Credit" type="number" value={{credit_limit}} /></th>
-                        <th><button onclick="Mofidcustomer('{{id}}')">Modifier</button></th>
+                        <td>{{id}}</td><td>{{discount_code}}</td><td>{{zip}}</td><td><input id="Name" type="text" value="{{name}}" /></td><td><input id="adress1" type="text" value="{{adress1}}" /></td>
+                        <td><input id="adress2" type="text" value="{{adress2}}" /></td><td><input id="City" type="text" value="{{city}}" /></td><td><input id="State" type="text" value="{{state}}" /></td><th><input id="Phone" type="text" value="{{phone}}" /></th><th><input id="Fax" type="text" value="{{fax}}" /></th><th><input id="Email" type="text" value="{{email}}" /></th><th><input id="Credit" type="number" value="{{credit_limit}}" /></th>
+                        <th><button onclick="Mofidcustomer({{id}})">Modifier</button></th>
                     </tr>
             
             </TABLE>

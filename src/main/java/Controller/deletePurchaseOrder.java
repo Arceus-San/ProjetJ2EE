@@ -8,6 +8,7 @@ package Controller;
 import Modele.DAO;
 import Modele.DAOException;
 import Modele.DataSourceFactory;
+import Modele.PurchaseOrder;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -42,7 +43,11 @@ public class deletePurchaseOrder extends HttpServlet {
         DAO dao = (DAO) getServletContext().getAttribute("dao");
         int ID = Integer.parseInt(request.getParameter("code"));
         Properties resultat = new Properties();
+        PurchaseOrder codeClient = dao.PurchaseOrdersInfos().get(ID);
+        System.out.println(codeClient.getProductId()+" "+codeClient.getQuantity());
+        dao.modifQuantiteSupprCommande(codeClient.getProductId(), codeClient.getQuantity());
         dao.supprPurchaseOrder(ID);
+
         
         try (PrintWriter out = response.getWriter()) {
             response.setContentType("application/json;charset=UTF-8");

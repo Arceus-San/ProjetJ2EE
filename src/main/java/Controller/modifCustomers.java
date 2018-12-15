@@ -50,7 +50,7 @@ public class modifCustomers extends HttpServlet {
             String email= request.getParameter("Email");
             int credit = Integer.parseInt(request.getParameter("Credit"));
             
-            System.out.print(ID+" ");
+            /*System.out.print(ID+" ");
             System.out.print(name+" ");
             System.out.print(addressline1+" ");
             System.out.print(addressline2+" ");
@@ -59,7 +59,7 @@ public class modifCustomers extends HttpServlet {
             System.out.print(phone+" ");
             System.out.print(fax+" ");
             System.out.print(email+" ");
-            System.out.print(credit+" ");
+            System.out.print(credit+" ");*/
             Properties resultat = new Properties();
             
             dao.modifCustomer(ID, name, addressline1, addressline2, city, state, phone, fax, email, credit);

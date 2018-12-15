@@ -2,7 +2,6 @@ package Controller;
 
 import Modele.DAO;
 import Modele.DAOException;
-import Modele.DataSourceFactory;
 import java.io.IOException;
 import java.util.HashMap;
 import javax.servlet.ServletException;
@@ -17,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginController extends HttpServlet {
     private final String adminLogin = "admin";
     private final String adminPass = "admin";
-    private final DAO dao = new DAO(DataSourceFactory.getDataSource());
+    private DAO dao;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,22 +32,16 @@ public class LoginController extends HttpServlet {
         
         String action = request.getParameter("action");
         if(action == null){
-            action = "";
-        }
-        
-        switch(action.toLowerCase()){
-            case "":{
-                request.getRequestDispatcher("Accueil.jsp").forward(request, response);
-                break;
-            }
-            
-            case "connexion":{
+            request.getRequestDispatcher("Accueil.jsp").forward(request, response);
+        }else{
+            dao = (DAO) getServletContext().getAttribute("dao");
+            if(action.toLowerCase().equals("connexion")){
                 String login = request.getParameter("login");
                 String pass = request.getParameter("motDePasse");
-                
+
                 if(login.equals(this.adminLogin) && pass.equals(this.adminPass)){
                     request.getRequestDispatcher("administrateur.html").forward(request, response);
-                    
+
                 }else{
                     try{
                         int clientID = Integer.parseInt(pass);
@@ -72,18 +65,10 @@ public class LoginController extends HttpServlet {
                            request.setAttribute("error", "Veuillez rentrer un identifiant et un code valide");
                            request.getRequestDispatcher("Accueil.jsp").forward(request, response); 
                     }
+                    
                 }
-                break;
-            }
-            
-            
-            case "deconnexion":{
-                request.getSession(true).invalidate();
-                request.getRequestDispatcher("Accueil.jsp").forward(request, response);
-                break;
             }
         }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
