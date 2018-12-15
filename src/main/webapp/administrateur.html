@@ -11,6 +11,7 @@ and open the template in the editor.
 	<!-- On charge JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<!-- On charge l'API Google -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<script type="text/javascript">
 // Chiffres d'affaires par produit           
@@ -23,7 +24,7 @@ and open the template in the editor.
 				title: 'Chiffre d`affaires par catégories de produit',
 				is3D: true
 			};
-			var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+			var chart = new google.visualization.PieChart(document.getElementById('piechartclient'));
 			chart.draw(data, options);
 		}
 
@@ -61,19 +62,19 @@ and open the template in the editor.
                   // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
                   'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
                 });
-                google.charts.setOnLoadCallback(drawRegionsMap);
+                
 
                 function drawRegionsMap(dataGeo) {
                   var data = google.visualization.arrayToDataTable(dataGeo);
                   var options = {region: 'US' ,resolution: 'provinces',title: 'Chiffre d`affaires par zone Géographique',};
-                  var geochart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+                  var geochart = new google.visualization.GeoChart(document.getElementById('piechartclient'));
 
                     geochart.draw(data, options);
                 }
       		function doGeoAjax() {
 			$.ajax({
 				url: "ChiffreAffairesGeo",
-                                data: $("#geoForm").serialize(),
+                                data: $("#codeForm").serialize(),
 				dataType: "json",
 				success: // La fonction qui traite les résultats
 					function (result) {
@@ -107,7 +108,7 @@ and open the template in the editor.
 		function doClientAjax() {
 			$.ajax({
 				url: "ChiffreAffairesClients",
-                                data: $("#ClientForm").serialize(),
+                                data: $("#codeForm").serialize(),
 				dataType: "json",
 				success: // La fonction qui traite les résultats
 					function (result) {
@@ -124,6 +125,58 @@ and open the template in the editor.
 				error: showError
 			});
 		}
+                // Afficher les ventes par client
+                function showCodes() {
+                // On fait un appel AJAX pour chercher les codes
+                $.ajax({
+                    url: "allProduit",
+                    dataType: "json",
+                    error: showError,
+                    success: // La fonction qui traite les résultats
+                            function (result) {
+                                console.log(result);
+                                var chartData = [];
+                                var h = {};
+                                // Le code source du template est dans la page
+                                var template = $('#codesTemplate2').html();
+                                for(var client in result.records) {
+                                chartData.push(result.records[client]);
+                                
+                            }
+                                h.records=chartData;
+         
+                                
+                                var processedTemplate = Mustache.to_html(template, h);
+                                // On combine le template avec le résultat de la requête
+                                $('#piechartclient').html(processedTemplate);
+                               
+                                
+                            }
+                });
+            }
+            function ModifProduct() {
+                var id = $('#ID').val();
+                var cost = $('#Cost').val();
+                var quantity = $('#Quantity').val();
+                var markup = $('#Markup').val();
+                var available = $('#Available').val();
+                var description = $('#Description').val();
+                console.log(cost);
+                
+                $.ajax({
+                    url: "modifProducts",
+                    data: {"ID": id, "Cost" : cost, "Quantity" : quantity , "Markup" : markup, "Available" : available ,"Description" : description},
+                    dataType: "json",
+                    success: // La fonction qui traite les résultats
+                            function (result) {
+                                showCodes();
+                                console.log(result);
+                            },
+                    error: showError
+                });
+                return false;
+            }
+
 		
 		// Fonction qui traite les erreurs de la requête
 		function showError(xhr, status, message) {
@@ -131,22 +184,62 @@ and open the template in the editor.
 		}
 
 	</script>
-           
+<style>
+        .bas{
+            position:fixed;
+            bottom:0px;
+            background-color:green;
+            text-align:center;
+            padding:10px;
+            width: 100%;
+            height: 30px; 
+            margin-right:10px;
+            overflow:scroll;
+        }
+        .navbar a:hover {
+        background-color: #000;
+        }
+        .active {
+         background-color: #4CAF50;
+        }
+    </style>        
 </head>
 <body>
+            <Div style="background-color:green;padding:15px;text-align:center">
+        <h1> BIENVENUE </h1>
+        </Div>
+        <div class="navbar" style="width: 100%;background-color: #555;overflow:auto;" >
+            <a  name="home" type="SUBMIT" value="Deconnexion" style="float: left;padding: 12px;color: white;text-decoration: none;font-size: 17px;"> Home</a>
+            <a name="client" type="SUBMIT" style="float: left;padding: 12px;color: white;text-decoration: none;font-size: 17px;"> Client</a>
+            <a class="active" name="admin" type="SUBMIT" style="float: left;padding: 12px;color: white;text-decoration: none;font-size: 17px;"> Admin</a> 
+        </div>
+ 
+    
+    <input name="g" type="radio" onclick="doAjax()" value="Passer une nouvelle commande">
+        <label>Product</label>
+
+        <input name="g" type="radio" onclick="doGeoAjax()" value="Changer ses Données">
+        <label>GEo</label>
+        
+        <input name="g" type="radio" onclick="doClientAjax()" value="Changer ses Données">
+        <label>Client</label>
+        
+        <input name="g" type="radio" onclick="showCodes()" value="Changer ses Données">
+        <label>Table Produit</label>
+        
 <-- Graphique chiffres d'affaires par produit --!>
- <form id='codeForm' onsubmit="event.preventDefault() ; doAjax()">
+ <form id='codeForm'>
             <label for="start">Date debut :</label>
             <input name="dateDebut" type="date" id="start" 
                 value="2018-07-22">
             <label for="fin">Date fin :</label>
             <input name="dateFin" type="date" id="fin" 
                 value="2018-07-22">
-            <input name="date" value="Changement date" type="SUBMIT">
+            
  </form>
-<div id="piechart" style="width: 900px; height: 500px;"></div>
+<!--<div id="piechart" style="width: 900px; height: 500px;"></div>
         
-<-- Graphique chiffres d'affaires par zone Géographique --!>            
+          
   <form id='geoForm' onsubmit="event.preventDefault() ; doGeoAjax()">
             <label for="start">Date debut :</label>
             <input name="dateDebut" type="date" id="startgeo" 
@@ -157,7 +250,7 @@ and open the template in the editor.
             <input name="date" value="Changement date" type="SUBMIT"> 
   </form>
    <div id="regions_div" style="width: 900px; height: 500px;"></div>      
-<-- Graphique chiffres d'affaires par client --!>     
+   
   <form id='ClientForm' onsubmit="event.preventDefault() ; doClientAjax()">
         <label for="start">Date debut :</label>
 
@@ -170,9 +263,34 @@ and open the template in the editor.
                 value="2018-07-22">
         <input name="date" value="Changement date" type="SUBMIT">
      
-  </form>
-  <div id="piechartclient" style="width: 900px; height: 500px;"></div>        
+  </form>-->
+
+    <script id="codesTemplate2" type="text/template">
+            <h1> Table Produits </h1>
+            <TABLE border=2 style="margin-bottom:20px;">
+                
+                <tr>
+                    <th>Numero du produit</th><th>Numero du fournisseur</th><th>Code du produit</th><th>Prix</th><th>Quantité disponible</th>
+                    <th>Balisage</th><th>Disponible</th><th>Description</th><th>Action</th>
+                </tr>
+                
+                {{#records}}
+                    <tr>
+                        <td><input id="ID" type="number" value={{id}} /></td><td>{{manuf_id}}</td><td>{{prod_code}}</td><td><input id="Cost" type="number" value={{cost}} /></td><td><input id="Quantity" type="number" value={{quantity}} /></td>
+                        <td><input id="Markup" type="number" value={{markup}} /></td><td><input id="Available" type="text" value={{available}} /></td><td><input id="Description" type="text" value={{description}} /></td><th>
+                            <button onclick="ModifProduct()">Modifier</button>
+                        </th>
+                    </tr>
+                {{/records}}
+            
+            </TABLE>
+            
+        </script>
         
+  <div id="piechartclient" style="width: 900px; height: 500px;"></div>  
+<footer class="bas">
+    PROJET JAVA 
+</footer> 
 
 </body>
 </html>
