@@ -42,7 +42,7 @@ public class modifProducts extends HttpServlet {
             int quantity= Integer.parseInt(request.getParameter("Quantity"));
             float markup= Float.parseFloat(request.getParameter("Markup"));
             String available= request.getParameter("Available");
-            String description= request.getParameter("Descrition");
+            String description= request.getParameter("Description");
             dao.modifProduct(ID, cost, quantity, markup, available, description);           
             Properties resultat = new Properties();
             try (PrintWriter out = response.getWriter()) {

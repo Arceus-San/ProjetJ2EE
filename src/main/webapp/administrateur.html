@@ -209,34 +209,34 @@ and open the template in the editor.
         <h1> BIENVENUE </h1>
         </Div>
         <div class="navbar" style="width: 100%;background-color: #555;overflow:auto;" >
-            <a  name="home" type="SUBMIT" value="Deconnexion" style="float: left;padding: 12px;color: white;text-decoration: none;font-size: 17px;"> Home</a>
-            <a name="client" type="SUBMIT" style="float: left;padding: 12px;color: white;text-decoration: none;font-size: 17px;"> Client</a>
-            <a class="active" name="admin" type="SUBMIT" style="float: left;padding: 12px;color: white;text-decoration: none;font-size: 17px;"> Admin</a> 
+            <a  href="Accueil.jsp" name="home" style="float: left;padding: 12px;color: white;text-decoration: none;font-size: 17px;"> Home</a>
+            <a name="client"  style="float: left;padding: 12px;color: white;text-decoration: none;font-size: 17px;"> Client</a>
+            <a class="active" name="admin"  style="float: left;padding: 12px;color: white;text-decoration: none;font-size: 17px;"> Admin</a> 
         </div>
  
-    
+    <fieldset>
     <input name="g" type="radio" onclick="doAjax()" value="Passer une nouvelle commande">
-        <label>Product</label>
-
+        <label>GRAPHIQUE CHIFFRE D'AFFAIRE/PRODUITS</label>
+        <br/>
         <input name="g" type="radio" onclick="doGeoAjax()" value="Changer ses Données">
-        <label>GEo</label>
-        
+        <label>GRAPHIQUE CHIFFRE D'AFFAIRE/ZONES GEOGRAPHIQUE</label>
+        <br/>
         <input name="g" type="radio" onclick="doClientAjax()" value="Changer ses Données">
-        <label>Client</label>
-        
+        <label>GRAPHIQUE CHIFFRE D'AFFAIRE/CLIENTS</label>
+        <br/>
+        <form id='codeForm' style="text-align:center;">
+        <label for="start">Date debut :</label>
+        <input name="dateDebut" type="date" id="start" 
+            value="2018-07-22">
+        <label for="fin">Date fin :</label>
+        <input name="dateFin" type="date" id="fin" 
+            value="2018-07-22">  
+        </form>
+    </fieldset>
         <input name="g" type="radio" onclick="showCodes()" value="Changer ses Données">
         <label>Table Produit</label>
         
-<-- Graphique chiffres d'affaires par produit --!>
- <form id='codeForm'>
-            <label for="start">Date debut :</label>
-            <input name="dateDebut" type="date" id="start" 
-                value="2018-07-22">
-            <label for="fin">Date fin :</label>
-            <input name="dateFin" type="date" id="fin" 
-                value="2018-07-22">
-            
- </form>
+
 <!--<div id="piechart" style="width: 900px; height: 500px;"></div>
         
           
