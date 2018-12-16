@@ -111,7 +111,6 @@
                         showCodes();
                         showCodes2();
                         console.log(result.message);
-                        console.log($('#message'));
                     },
             error: showError
         });
