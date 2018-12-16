@@ -157,6 +157,21 @@ public class DAOTest {
     }
     
     /**
+     * Test of testtotalForCustomerAddPurchase method, of class DAO.
+     * @throws Modele.DAOException
+     */
+    @Test
+    public void testtotalForCustomerAddPurchase() throws DAOException {
+        String d1="2011-01-01";
+        String d2="2018-12-31";
+        HashMap<String,Float> clients = myDAO.totalForCustomer(d1,d2);
+        assertEquals(15853.f,clients.get("Jumbo Eagle Corp"),0.0f);
+        myDAO.addPurchaseOrder(1, 1, 980025, 1000,0, "2018-12-16", "2018-12-16", "Poney Express");
+        HashMap<String,Float> clients2 = myDAO.totalForCustomer(d1,d2);
+        assertEquals(2111843.f,clients2.get("Jumbo Eagle Corp"),0.0f);
+    }
+    
+    /**
      * Test of addProduct method, of class DAO.
      * @throws Modele.DAOException
      */

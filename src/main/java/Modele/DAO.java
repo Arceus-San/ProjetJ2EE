@@ -120,7 +120,7 @@ public class DAO {
         Renvoie une HashMap avec comme clé un nom de client et comme valeur correspondante le montant total qu'il a dépensé
         */
         public HashMap totalForCustomer(String date1, String date2) throws DAOException{
-            String sql="SELECT NAME, SUM(SHIPPING_COST+PURCHASE_COST * QUANTITY) AS TOTAL FROM CUSTOMER INNER JOIN PURCHASE_ORDER USING (CUSTOMER_ID) INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID AND (PURCHASE_ORDER.SHIPPING_DATE BETWEEN ? AND ?) GROUP BY NAME";
+            String sql="SELECT NAME, SUM(SHIPPING_COST+PURCHASE_COST * QUANTITY) AS TOTAL FROM CUSTOMER INNER JOIN PURCHASE_ORDER USING (CUSTOMER_ID) INNER JOIN PRODUCT ON PRODUCT.PRODUCT_ID=PURCHASE_ORDER.PRODUCT_ID AND (PURCHASE_ORDER.SALES_DATE BETWEEN ? AND ?) GROUP BY NAME";
             HashMap<String,Float> client = new HashMap<>();
             
              try (Connection connection = myDataSource.getConnection();
