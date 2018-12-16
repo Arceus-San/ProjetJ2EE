@@ -55,7 +55,7 @@ public class deletePurchaseOrder extends HttpServlet {
             DAO dao = (DAO) getServletContext().getAttribute("dao");
             int ID = Integer.parseInt(request.getParameter("code"));
             PurchaseOrder codeClient = dao.PurchaseOrdersInfos().get(ID);
-            if(today.before(dateFormat.parse(codeClient.getShippingDate()))){
+            if(today.before(dateFormat.parse(codeClient.getSalesDate()))){
                 message = "Votre commande a bien été effacée";
                 dao.modifQuantiteSupprCommande(codeClient.getProductId(), codeClient.getQuantity());
                 dao.supprPurchaseOrder(ID);
