@@ -173,25 +173,152 @@
     function showError(xhr, status, message) {
         alert("Erreur: " + xhr.status + " : " + message);
     }
-
+    
+        function afficher2()
+        {
+        var h;
+	document.getElementById("passer_commande").style.visibility = "";
+        document.getElementById("donnes").style.visibility = "hidden";
+        var template = $('#vide').html();
+        var processedTemplate = Mustache.to_html(template, h);
+        $('#codes2').html(processedTemplate);                   
+        }
+        function afficher3()
+        {
+        var h;
+	document.getElementById("donnes").style.visibility = "";
+        document.getElementById("passer_commande").style.visibility = "hidden";
+        var template = $('#vide').html();
+        var processedTemplate = Mustache.to_html(template, h);
+        $('#codes2').html(processedTemplate);
+        $('#codes').html(processedTemplate);
+        }
+        function disconnect(){
+            $.ajax({
+                data: {"action": "deconnexion"},
+                success: function(){
+                            window.location.href = "LoginController";
+                            console.log("Déconnexion...");
+                        }
+            });
+            
+            return false;
+        }
     </script>
+    <style>
+        .bas{
+            position:fixed;
+            bottom:0px;
+            background-color:green;
+            text-align:center;
+            padding:10px;
+            width: 100%;
+            height: 30px; 
+            margin-right:10px;
+            overflow:scroll;
+        }
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-bottom: 40px;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+  background-color: green;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: green;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #00cc00;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+    </style>
 </head>
 <body>
 <h1>Edition des taux de remise (AJAX)</h1>
-    
+                <Div style="background-color:green;padding:15px;text-align:center">
+        <h1> CLIENT </h1>
+        </Div>
+        <div class="navbar" style="width: 100%;background-color: #555;overflow:auto;" >
+            <a  onclick="disconnect()" href="#" name="home"> Home</a>
+            <div class="dropdown" >
+                    <button class="dropbtn">Client 
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                <div class="dropdown-content">
+                  <a href="#" onclick="afficher2()">Passer une commande</a>
+                  <a href="#" onclick="afficher3()">Modifier ses données</a>
+                </div>
+              </div>
+            <a name="admin"> Admin</a> 
+            
+        </div>
+
     <h4 id="message"></h4>
          <!-- La zone où les résultats vont s'afficher -->
+        <div id="passer_commande" style="visibility:hidden" >
         <div id="codes"></div>
         
         
         <input name="g" type="radio" onclick="showCodes2()" value="Passer une nouvelle commande">
         <label for="Passer une nouvelle commande">Passer une nouvelle commande</label>
-
+        </div>
+        <div id="donnes" style="visibility:">
         <input name="g" type="radio" onclick="showCodes3()" value="Changer ses Données">
         <label for="Changer ses Données">Changer ses Données</label>
-
+        </div>
+        
         <div id="Codes2"></div>
-
+        <script id="vide" type="text/template">
+        </script>
 
 
         <!-- Le template qui sert à formatter la liste des codes -->
@@ -211,7 +338,7 @@
             
         </script>
     <script id="codesTemplate2" type="text/template">
-            <TABLE border=2>
+            <TABLE border=2 style="margin-bottom:20px;">
 
                 <tr>
                     <th>Numero du produit</th><th>Numero du fournisseur</th><th>Code du produit</th><th>Prix</th><th>Quantité disponible</th>
@@ -234,7 +361,7 @@
         
  <script id="codesTemplate3" type="text/template">
             
-            <TABLE border=2>
+            <TABLE border=2 style="margin-bottom:20px;">
             
                 <tr>
                     <th>Son ID</th><th>Discount_Code</th><th>Zip</th><th>Name</th><th>Adress1</th>
@@ -250,5 +377,9 @@
             </TABLE>
             
         </script>
+        <footer class="bas">
+            PROJET JAVA 
+        </footer> 
+
 </body>
 </html>
