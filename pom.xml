@@ -122,6 +122,7 @@
                                 <version>8.5.23.0</version>
                                 <destFileName>webapp-runner.jar</destFileName>
                                 </artifactItem>
+                                
                             </artifactItems>
                         </configuration>
                     </execution>
