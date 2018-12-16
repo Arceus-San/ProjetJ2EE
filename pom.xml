@@ -71,6 +71,12 @@
                 <artifactId>derbytools</artifactId>
                 <version>10.14.1.0</version>
         </dependency>
+        <!-- For deployment to tomcat, which does not provide the JSTL -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
     </dependencies>
 
     <build>
