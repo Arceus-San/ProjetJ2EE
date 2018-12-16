@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Properties;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author BenjiX34
  */
+@WebServlet(name = "ChiffreAffairesProduit", urlPatterns = {"/ChiffreAffairesProduit"})
 public class ChiffreAffairesProduit extends HttpServlet {
 
     /**

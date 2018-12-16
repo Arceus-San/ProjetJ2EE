@@ -20,6 +20,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import org.apache.derby.tools.ij;
 
 /**
@@ -27,7 +29,8 @@ import org.apache.derby.tools.ij;
  * @author pedago
  */
 @WebListener()
-public class ApplicationListener implements ServletContextListener {
+@WebServlet(name = "ApplicationListener", urlPatterns = {"/ApplicationListener"})
+public class ApplicationListener extends HttpServlet implements ServletContextListener{
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {

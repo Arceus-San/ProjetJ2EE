@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author guillaume
  */
-//@WebServlet(name = "AddPurchaseOrder_InJSON", urlPatterns = {"/AddPurchaseOrder"})
+@WebServlet(name = "AddPurchaseOrder_InJSON", urlPatterns = {"/AddPurchaseOrder"})
 public class AddPurchaseOrder extends HttpServlet {
 
     /**
