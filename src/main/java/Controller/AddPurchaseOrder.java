@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
@@ -57,12 +58,22 @@ public class AddPurchaseOrder extends HttpServlet {
                
         String message;
         
+        Calendar c = Calendar.getInstance();
+        
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	Date today = new Date();
+        Date shippingDate;
+        
+        c.setTime(today);
+
+        c.add(Calendar.DATE, 5);
+
+        shippingDate = c.getTime();
+        
         
         try {
             dao.modifQuantite(product_ID, quantity);
-            dao.addPurchaseOrder(maxID(allCommandes)+1, customerID, product_ID, quantity, Math.round(new Random().nextFloat()*10000f)/100f, dateFormat.format(today), dateFormat.format(today), companie);
+            dao.addPurchaseOrder(maxID(allCommandes)+1, customerID, product_ID, quantity, Math.round(new Random().nextFloat()*10000f)/100f, dateFormat.format(today), dateFormat.format(shippingDate), companie);
             message = "Votre commande a bien été enregistré";
         } catch (NumberFormatException ex) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
