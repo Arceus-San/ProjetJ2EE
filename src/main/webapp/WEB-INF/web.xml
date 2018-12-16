@@ -94,6 +94,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>LoginController</welcome-file>
+        <welcome-file>redirect.jsp</welcome-file>
     </welcome-file-list>
 </web-app>
