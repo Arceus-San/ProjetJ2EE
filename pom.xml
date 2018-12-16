@@ -71,6 +71,12 @@
                 <artifactId>derbytools</artifactId>
                 <version>10.14.1.0</version>
         </dependency>
+        <!-- For deployment to tomcat, which does not provide the JSTL -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -116,12 +122,7 @@
                                 <version>8.5.23.0</version>
                                 <destFileName>webapp-runner.jar</destFileName>
                                 </artifactItem>
-                                <artifactItem>
-                                    <groupId>javax</groupId>
-                                    <artifactId>javaee-endorsed-api</artifactId>
-                                    <version>7.0</version>
-                                    <type>jar</type>
-                                </artifactItem>
+                                
                             </artifactItems>
                         </configuration>
                     </execution>
