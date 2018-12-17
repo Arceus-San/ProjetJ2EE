@@ -27,7 +27,7 @@ and open the template in the editor.
         function drawChart(dataArray) {
                 var data = google.visualization.arrayToDataTable(dataArray);
                 var options = {
-                        title: 'Chiffre d`affaires par catégories de produit',
+                        title: "Chiffre d'affaires par Catégorie de produit",
                         is3D: true
                 };
                 var chart = new google.visualization.PieChart(document.getElementById('piechartclient'));
@@ -72,7 +72,7 @@ and open the template in the editor.
 
         function drawRegionsMap(dataGeo) {
           var data = google.visualization.arrayToDataTable(dataGeo);
-          var options = {region: 'US' ,resolution: 'provinces',title: 'Chiffre d`affaires par zone Géographique',};
+          var options = {region: 'US' ,resolution: 'provinces',title: "Chiffre d'affaires par Zone Géographique"};
           var geochart = new google.visualization.GeoChart(document.getElementById('piechartclient'));
 
             geochart.draw(data, options);
@@ -103,7 +103,7 @@ and open the template in the editor.
         function drawChartClient(dataClient) {
                 var data = google.visualization.arrayToDataTable(dataClient);
                 var options = {
-                        title: 'Chiffre d`affaires par Clients',
+                        title: "Chiffre d'affaires par Client",
                         is3D: true
                 };
                 var Clientchart = new google.visualization.PieChart(document.getElementById('piechartclient'));
@@ -373,7 +373,7 @@ and open the template in the editor.
         <legend>Ajouter un nouveau produit</legend>
         <form id="ajouter">
             <div id="ajout">
-            <label>Numero du fournisseur:
+            <label>Numéro du fournisseur:
                 <select name="Manuf" >
                     <option>19963323</option>
                     <option>19963324</option><option>19963325</option><option>19948494</option><option>19977775</option><option>19977346</option>
@@ -395,7 +395,7 @@ and open the template in the editor.
                 </select>
             </label>
             <label>Prix:<input type="number" name="Prix" step="0.01" min="0" required /></label>
-            <label>Quantite:<input type="number" name="Quantite" min="0" required /></label>
+            <label>Quantité:<input type="number" name="Quantite" min="0" required /></label>
             <label>Balisage:<input type="number" name="Balisage" step="0.01" min="0" required /></label>
             <label>Description:<input type="text" name="Description" /></label>
             <input type='button' value='Ajouter' onclick='addProduct()'>
@@ -405,11 +405,11 @@ and open the template in the editor.
     <fieldset id="graphique" title="Graphiques" style="color:white;font-family:Arial;">
         <legend>Graphiques de chiffre d'affaires</legend>
         <div>
-            <label><input name="g" type="radio" onclick="doAjax()"/>Par Produit</label>
+            <label><input name="g" type="radio" onclick="doAjax()"/>Par Catégorie de Produit</label>
             <br/>
             <label><input name="g" type="radio" onclick="doGeoAjax()"/>Par Zone Géographique</label>
             <br/>
-            <label><input name="g" type="radio" onclick="doClientAjax()"/>Par Client</label>
+            <label><input name="g" type="radio" onclick="doClientAjax()" checked />Par Client</label>
         </div>
         <br/>
         <div>
@@ -435,7 +435,7 @@ and open the template in the editor.
             <TABLE border=5 bgcolor="#000000" style="margin-bottom:60px;padding:5px;color:white;font-family:Arial Black">
                 
                 <tr>
-                    <th>Numero du produit</th><th>Numero du fournisseur</th><th>Code du produit</th><th>Prix</th><th>Quantité disponible</th>
+                    <th>Numero du produit</th><th>Numéro du fournisseur</th><th>Code du produit</th><th>Prix</th><th>Quantité disponible</th>
                     <th>Balisage</th><th>Disponible</th><th>Description</th><th>Modifier</th><th>Supprimer</th>
                 </tr>
 
