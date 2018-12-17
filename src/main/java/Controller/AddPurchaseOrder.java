@@ -55,7 +55,9 @@ public class AddPurchaseOrder extends HttpServlet {
         String companie = request.getParameter("Companie");
         
         HashMap<Integer, PurchaseOrder> allCommandes = dao.PurchaseOrdersInfos();
-               
+        
+        Product boughtProduct = (Product) dao.productsInfos().get(product_ID);
+                
         String message;
         
         Calendar c = Calendar.getInstance();
@@ -76,9 +78,14 @@ public class AddPurchaseOrder extends HttpServlet {
             message = "Veuillez rentrer une quantité valide";
         }else{
             try {
-                dao.modifQuantite(product_ID, Integer.parseInt(quantity));
-                dao.addPurchaseOrder(maxID(allCommandes)+1, customerID, product_ID, Integer.parseInt(quantity), Math.round(new Random().nextFloat()*10000f)/100f, dateFormat.format(today), dateFormat.format(shippingDate), companie);
-                message = "Votre commande a bien été enregistré";
+                if(Integer.parseInt(quantity)>boughtProduct.getQuantity()){
+                    message = "Il n'y a que "+boughtProduct.getQuantity()+" produits encore disponibles."
+                           +"<br>"+"Vous ne pouvez donc pas en acheter "+quantity;
+                }else{
+                    dao.modifQuantite(product_ID, Integer.parseInt(quantity));
+                    dao.addPurchaseOrder(maxID(allCommandes)+1, customerID, product_ID, Integer.parseInt(quantity), Math.round(new Random().nextFloat()*10000f)/100f, dateFormat.format(today), dateFormat.format(shippingDate), companie);
+                    message = "Votre commande a bien été enregistré";
+                }
             } catch (NumberFormatException ex) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 message = ex.getMessage();

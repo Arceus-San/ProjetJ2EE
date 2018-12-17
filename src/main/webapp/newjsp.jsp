@@ -202,6 +202,30 @@
             
             return false;
         }
+        
+        function modifyCode(id_commande){
+            var colonnesTableau = $('#'+id_commande).children('td');
+            var labels = ["id_commande","customer_id","product_id","","shipping_cost","sales_date","shipping_date","freight_company"];
+            var objColonnes = {};
+            for(var i=0; i<colonnesTableau.length-1; i++){
+                if(i===3){
+                    continue;
+                }
+                objColonnes[labels[i]] = colonnesTableau[i].textContent;
+            }
+            objColonnes["quantity"] = $('#quantity-'+id_commande).val();
+            
+            $.ajax({
+                url: "ModifyPurchaseOrder",
+                data: objColonnes,
+                success: function(result){
+                    $('#message').html(result.message);
+                    showCodes2();
+                }
+            });
+            
+            console.log(objColonnes);
+        }
     </script>
     <style>
         .bas{
@@ -336,8 +360,8 @@
             {{! Pour chaque enregistrement }}
             {{#records}}
                 {{! Une ligne dans la table }}
-                <TR><TD>{{order_num}}</TD><TD>{{customer_id}}</TD><TD>{{product_id}}</TD><TD>{{quantity}}</TD><TD>{{shipping_cost}}</TD><TD>{{sales_date}}</TD><TD>{{shipping_date}}</TD><TD>{{freight_company}}</TD>
-                <TD><img src="img/supprimer.png" onclick="deleteCode('{{order_num}}')" style="width:30px;height:20px"></TD></TR>
+                <TR id={{order_num}}><TD>{{order_num}}</TD><TD>{{customer_id}}</TD><TD>{{product_id}}</TD><TD><input type="number" id="quantity-{{order_num}}" min="0" value="{{quantity}}" required /></TD><TD>{{shipping_cost}}</TD><TD>{{sales_date}}</TD><TD>{{shipping_date}}</TD><TD>{{freight_company}}</TD>
+                <TD><button onclick="modifyCode({{order_num}})">Modifier</button><img src="img/supprimer.png" onclick="deleteCode('{{order_num}}')" style="width:30px;height:20px"></TD></TR>
             {{/records}}
            
             </TABLE>
