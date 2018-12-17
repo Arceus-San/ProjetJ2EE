@@ -46,7 +46,7 @@ public class deleteProduct extends HttpServlet {
         
         try{
             DAO dao = (DAO) getServletContext().getAttribute("dao");
-            String ID =request.getParameter("Prod");
+            String ID =request.getParameter("code");
                 message = "Votre product a bien été effacée";
                 dao.supprProduct(ID);
         }catch(DAOException e){

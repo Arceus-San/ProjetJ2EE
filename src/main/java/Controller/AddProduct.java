@@ -47,7 +47,7 @@ public class AddProduct extends HttpServlet {
         DAO dao = (DAO) getServletContext().getAttribute("dao");
                 
 	int product_ID = Integer.parseInt(request.getParameter("ID"));
-        int manuf_ID = (int)request.getSession(true).getAttribute("Manuf");
+        int manuf_ID = Integer.parseInt(request.getParameter("Manuf"));
         float  prix = Float.parseFloat(request.getParameter("Prix"));
         String code = request.getParameter("code");
         int quantity = Integer.parseInt(request.getParameter("Quantite"));
@@ -55,6 +55,7 @@ public class AddProduct extends HttpServlet {
         String disponible = request.getParameter("Disponibilite");
         String description = request.getParameter("Description");
         String message;
+        System.out.println(disponible);
         
         try {
             dao.addProduct(product_ID, manuf_ID, code, prix, quantity, balisage, disponible, description);

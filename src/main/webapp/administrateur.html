@@ -268,7 +268,7 @@ and open the template in the editor.
     .bas{
         position:fixed;
         bottom:0px;
-        background-color:green;
+        background-color:#00BFFF;
         text-align:center;
         padding:10px;
         width: 100%;
@@ -296,7 +296,7 @@ and open the template in the editor.
     .dropdown {
       float: left;
       overflow: hidden;
-      background-color: green;
+      background-color: #084B8A;
     }
 
     .dropdown .dropbtn {
@@ -311,7 +311,7 @@ and open the template in the editor.
     }
 
     .navbar a:hover, .dropdown:hover .dropbtn {
-      background-color: green;
+      background-color: #00cc00;
     }
 
     .dropdown-content {
@@ -333,7 +333,7 @@ and open the template in the editor.
     }
 
     .dropdown-content a:hover {
-      background-color: #00cc00;
+      background-color: #084B8A;
     }
 
     .dropdown:hover .dropdown-content {
@@ -342,10 +342,18 @@ and open the template in the editor.
     #ajout{
         display: inline-block;
     }
+    body {
+        color:black;
+        background-color:white;
+        background-image:url(img/admin.jpg);
+}
+
+
     </style>        
 </head>
 <body>
-    <div style="background-color:green;padding:15px;text-align:center">
+    <div style="background-color:#00BFFF;padding:5px;text-align:center">
+        <img src="img/icone.png" style="float:left;width:85px;height:85px;">
         <h1> ADMINISTRATEUR </h1>
     </div>
     <div class="navbar" style="width: 100%;background-color: #555;overflow:auto;" >
@@ -360,29 +368,48 @@ and open the template in the editor.
         </div>
 
     </div>
-    <h4 id="message"></h4>
-    <fieldset id="table">
+    <h4 id="message" style="color:white;font-family: Arial Black;"></h4>
+    <fieldset id="table" style="color:white;font-family: Arial Black;">
         <legend>Ajouter un nouveau produit</legend>
         <form id="ajouter">
             <div id="ajout">
-            <label>ID:<input type="number" id="ID" /></label>
-            <label>Numero du fournisseur:<input type="number" id="Manuf" /></label>
-            <label>Code:<input type="text" id="code" /></label>
-            <label>Prix:<input type="number" id="Prix" /></label>
-            <label>Quantite:<input type="number" id="Quantite" /></label>
-            <label>Balisage:<input type="number" id="Balisage" /></label>
+            <label>ID:<input type="number" name="ID" /></label>
+            <label>Numero du fournisseur:
+                <select name="Manuf" >
+                    <option>19963323</option>
+                    <option>19963324</option><option>19963325</option><option>19948494</option><option>19977775</option><option>19977346</option>
+                    <option>19977347</option><option>19977348</option><option>19985678</option><option>19960022</option>
+                    <option>19986982</option><option>19974892</option><option>19986196</option><option>19986542</option>
+                    <option>19978451</option><option>19985590</option><option>19980198</option><option>19971233</option>
+                    <option>19987296</option><option>19984899</option><option>19955656</option><option>19982461</option>
+                    <option>19989719</option><option>19984681</option><option>19984682</option>
+                </select>
+            </label>
+            <label>Code:
+                <select name="code" >
+                    <option>SW</option>
+                    <option>CB</option>
+                    <option>BK</option>
+                    <option>MS</option>
+                    <option>HW</option>
+                    <option>FW</option>
+                </select>
+            </label>
+            <label>Prix:<input type="number" name="Prix" step="0.01" /></label>
+            <label>Quantite:<input type="number" name="Quantite" /></label>
+            <label>Balisage:<input type="number" name="Balisage" step="0.01" /></label>
             <label>Disponibilite:
-                    <select id="Disponibilite" >
+                    <select name="Disponibilite" >
                         <option value="TRUE">TRUE</option>
                         <option value="FALSE">FALSE</option>
                     </select>
             </label>
-            <label>Description:<input type="text" id="Description" /></label>
-            <input type='submit' value='Ajouter' onclick='addProduct()'>
+            <label>Description:<input type="text" name="Description" /></label>
+            <input type='button' value='Ajouter' onclick='addProduct()'>
             </div>
         </form>
     </fieldset>
-    <fieldset id="graphique" title="Graphiques">
+    <fieldset id="graphique" title="Graphiques" style="color:white;font-family:Arial;">
         <legend>Graphiques de chiffre d'affaires</legend>
         <div>
             <label><input name="g" type="radio" onclick="doAjax()"/>Par Produit</label>
@@ -410,9 +437,10 @@ and open the template in the editor.
     </fieldset>
 
     <script id="codesTemplate2" type="text/template">
-            <h1> Table Produits </h1>
-            <TABLE border=2 style="margin-bottom:20px;">
-
+            <h1 style="color:white;font-family: Arial Black;"> Table Produits </h1>
+            
+            <TABLE border=5 style="margin-bottom:60px;padding:5px;color:white;font-family:Arial Black">
+                
                 <tr>
                     <th>Numero du produit</th><th>Numero du fournisseur</th><th>Code du produit</th><th>Prix</th><th>Quantité disponible</th>
                     <th>Balisage</th><th>Disponible</th><th>Description</th><th>Modifier</th><th>Supprimer</th>
@@ -422,16 +450,16 @@ and open the template in the editor.
                     <tr>
                         <td>{{id}}</td><td>{{manuf_id}}</td><td>{{prod_code}}</td><td><input id="Cost-{{id}}" type="number"  min="0" value="{{cost}}" /></td><td><input id="Quantity-{{id}}" type="number" min="0" value="{{quantity}}" /></td>
                         <td><input id="Markup-{{id}}" type="number" min="0" value="{{markup}}" /></td><td>{{available}}</td><td><input id="Description-{{id}}" type="text" value="{{description}}"/></td>
-                        <td><button onclick="ModifProduct({{id}})">Modifier</button></td>
-                        <td><button onclick="deleteProduct({{id}})">Supprimer</button></td>
+                        <td> <button onclick="ModifProduct({{id}})">Modifier</button> </td>
+                        <td><img src="img/supprimer.png" onclick="deleteProduct({{id}})" style="width:30px;height:20px"></td>
                     </tr>
                 {{/records}}
-
+                            
             </TABLE>
 
         </script>
 
-    <div id="piechartclient" style="width: 900px; height: 500px;"></div>  
+    <div id="piechartclient" style="width: 900px; height: 500px;  margin-left:400px;position:absolute;"></div>  
     <footer class="bas">
         PROJET JAVA 
     </footer> 

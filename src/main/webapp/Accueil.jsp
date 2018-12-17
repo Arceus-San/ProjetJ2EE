@@ -14,14 +14,15 @@
     </head>
     <style>
         .bas{
-            position:absolute;
+            position:fixed;
             bottom:0px;
-            background-color:green;
+            background-color:#00BFFF;
             text-align:center;
             padding:10px;
             width: 100%;
             height: 30px; 
             margin-right:10px;
+            overflow:scroll;
         }
         .b{
             list-style-type: square;
@@ -39,7 +40,7 @@
         .createur{
             position:absolute;
             right:0px;
-            background-color:#4CAF50;
+            background-color:#81DAF5;
             overflow:auto;
             width:300px;
             text-align:center;
@@ -52,11 +53,17 @@
         background-color: #000;
         }
         .active {
-         background-color: #4CAF50;
+         background-color: #084B8A;
         }
+        body {
+        color:black;
+        background-color:white;
+        background-image:url(img/accueil.jpg);
+}
     </style>
     <body>
-        <Div style="background-color:green;padding:15px;text-align:center">
+        <Div style="background-color:#00BFFF;padding:5px;text-align:center">
+            <img src="img/icone.png" style="float:left;width:85px;height:85px;">
         <h1> BIENVENUE </h1>
         </Div>
         <div class="navbar" style="width: 100%;background-color: #555;overflow:auto;" >
@@ -80,7 +87,7 @@
         </div>
         <h4>${error}</h4>
         <form method='POST'>
-            <fieldset >
+            <fieldset style="color:white">
                 <legend> Identifiants : </legend>  
                 <label for="login" ><b>Login :</b></label><br/>
                     <input name="login" id="login" size="10" maxlength="255" title="Votre Email" style="width:150px"><br/>
@@ -91,14 +98,15 @@
         <input name="action" value="Connexion" type="SUBMIT">
             </fieldset>
         </form>
-        <div class="expli">
+        
+        <div class="expli" style="position:absolute;margin-top:100px;margin-left: 40px;">
             <h1 style="font-size:25px">
                 <u><b>LES CLIENTS :</b></u>
             </h1>
-            <p>login : EMAIL<br/>
+            <p style="ext-align:center;">login : EMAIL<br/>
                password : CUSTOMER_ID
             </p>
-            <h2 style="font-size:25px">
+            <h2 style="font-size:25px" style="text-align:center;">
                 <u><b>LES ADMINISTRATEURS :</b></u>
             </h2>
             <p>

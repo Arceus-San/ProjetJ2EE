@@ -15,13 +15,7 @@
     <!-- On charge le moteur de template mustache https://mustache.github.io/ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
     <script>
-    $(document).ready(// Exécuté à la fin du chargement de la page
-            function () {
-                // On montre la liste des codes
-                showCodes();
 
-            }
-    );
 
     function showCodes() {
         // On fait un appel AJAX pour chercher les codes
@@ -68,7 +62,7 @@
                         var processedTemplate = Mustache.to_html(template, h);
                         // On combine le template avec le résultat de la requête
                         $('#Codes2').html(processedTemplate);
-
+                       
 
                     }
         });
@@ -179,20 +173,24 @@
         var h;
 	document.getElementById("passer_commande").style.visibility = "";
         document.getElementById("donnes").style.visibility = "hidden";
+        document.getElementById("message").innerHTML = "";
         var template = $('#vide').html();
         var processedTemplate = Mustache.to_html(template, h);
-        $('#codes2').html(processedTemplate);                   
+        $('#Codes2').html(processedTemplate);      
+        showCodes();
         }
         function afficher3()
         {
         var h;
 	document.getElementById("donnes").style.visibility = "";
         document.getElementById("passer_commande").style.visibility = "hidden";
+        document.getElementById("message").innerHTML = "";
         var template = $('#vide').html();
         var processedTemplate = Mustache.to_html(template, h);
-        $('#codes2').html(processedTemplate);
+        $('#Codes2').html(processedTemplate);
         $('#codes').html(processedTemplate);
         }
+        
         function disconnect(){
             $.ajax({
                 data: {"action": "deconnexion"},
@@ -209,7 +207,7 @@
         .bas{
             position:fixed;
             bottom:0px;
-            background-color:green;
+            background-color:#00BFFF;
             text-align:center;
             padding:10px;
             width: 100%;
@@ -236,7 +234,7 @@
 .dropdown {
   float: left;
   overflow: hidden;
-  background-color: green;
+  background-color: #084B8A;
 }
 
 .dropdown .dropbtn {
@@ -251,8 +249,9 @@
 }
 
 .navbar a:hover, .dropdown:hover .dropbtn {
-  background-color: green;
+  background-color: #084B8A;
 }
+
 
 .dropdown-content {
   display: none;
@@ -273,18 +272,23 @@
 }
 
 .dropdown-content a:hover {
-  background-color: #00cc00;
+  background-color: #084B8A;
 }
 
 .dropdown:hover .dropdown-content {
   display: block;
 }
+        body {
+        color:black;
+        background-color:white;
+        background-image:url(img/client.jpg);
+}
 
     </style>
 </head>
 <body>
-<h1>Edition des taux de remise (AJAX)</h1>
-                <Div style="background-color:green;padding:15px;text-align:center">
+                <Div style="background-color:#00BFFF;padding:5px;text-align:center">
+                    <img src="img/icone.png" style="float:left;width:85px;height:85px;">
         <h1> CLIENT </h1>
         </Div>
         <div class="navbar" style="width: 100%;background-color: #555;overflow:auto;" >
@@ -302,18 +306,18 @@
             
         </div>
 
-    <h4 id="message"></h4>
+    <h4 id="message" style="color:white"></h4>
          <!-- La zone où les résultats vont s'afficher -->
         <div id="passer_commande" style="visibility:hidden" >
         <div id="codes"></div>
         
         
         <input name="g" type="radio" onclick="showCodes2()" value="Passer une nouvelle commande">
-        <label for="Passer une nouvelle commande">Passer une nouvelle commande</label>
+        <label for="Passer une nouvelle commande" style="color:white">Passer une nouvelle commande</label>
         </div>
         <div id="donnes" style="visibility:">
         <input name="g" type="radio" onclick="showCodes3()" value="Changer ses Données">
-        <label for="Changer ses Données">Changer ses Données</label>
+        <label for="Changer ses Données" style="color:white">Changer ses Données</label>
         </div>
         
         <div id="Codes2"></div>
@@ -323,26 +327,28 @@
 
         <!-- Le template qui sert à formatter la liste des codes -->
         <script id="codesTemplate" type="text/template">
+            <h1 style="color:white;font-family:Arial Black;"> Vos Commandes </h1>
             {{^records}}
             Vous n'avez aucune commande
             {{/records}}
-            <TABLE border=2>
+            <TABLE border=2 style="color:white">
             <tr><th>Numero</th><th>Customer_id</th><th>Product_id</th><th>Quantity</th><th>Shipping_cost</th><th>Sales_date</th><th>Shipping_date</th><th>freight_company</th></tr>
             {{! Pour chaque enregistrement }}
             {{#records}}
                 {{! Une ligne dans la table }}
-                <TR><TD>{{order_num}}</TD><TD>{{customer_id}}</TD><TD>{{product_id}}</TD><TD>{{quantity}}</TD><TD>{{shipping_cost}}</TD><TD>{{sales_date}}</TD><TD>{{shipping_date}}</TD><TD>{{freight_company}}</TD><TD><button onclick="deleteCode('{{order_num}}')">Supprimer</button></TD></TR>
+                <TR><TD>{{order_num}}</TD><TD>{{customer_id}}</TD><TD>{{product_id}}</TD><TD>{{quantity}}</TD><TD>{{shipping_cost}}</TD><TD>{{sales_date}}</TD><TD>{{shipping_date}}</TD><TD>{{freight_company}}</TD>
+                <TD><img src="img/supprimer.png" onclick="deleteCode('{{order_num}}')" style="width:30px;height:20px"></TD></TR>
             {{/records}}
            
             </TABLE>
             
         </script>
     <script id="codesTemplate2" type="text/template">
-            <TABLE border=2 style="margin-bottom:20px;">
+            <TABLE border=5 style="margin-bottom:60px;color:#FFFFFF;font-family:Arial Black">
 
                 <tr>
                     <th>Numero du produit</th><th>Numero du fournisseur</th><th>Code du produit</th><th>Prix</th><th>Quantité disponible</th>
-                    <th>Balisage</th><th>Disponible</th><th>Description</th><th>Quantité</th><th>Companie</th>
+                    <th>Balisage</th><th>Disponible</th><th>Description</th><th>Quantité</th><th>Companie</th><th>Commander</th>
                 </tr>
                 
                 {{#records}}
@@ -351,7 +357,7 @@
                         <td>{{markup}}</td><td>{{available}}</td><td>{{description}}</td>
                         <td><input id="Quantite-{{id}}" type="number" min="1" max="{{quantity}}"></td>
                         <td><input id="Companie-{{id}}" type="text"></td>
-                        <td><button onclick="addCode('{{id}}')">Commander</button></td>
+                        <td><img src="img/commander.png" onclick="addCode('{{id}}')" style="width:60px;height:30px" ></td>
                     </tr>
                 {{/records}}
             
@@ -361,7 +367,7 @@
         
  <script id="codesTemplate3" type="text/template">
             
-            <TABLE border=2 style="margin-bottom:20px;">
+            <TABLE border=2 style="margin-bottom:20px;color:white;font-family:Arial">
             
                 <tr>
                     <th>Son ID</th><th>Discount_Code</th><th>Zip</th><th>Name</th><th>Adress1</th>
