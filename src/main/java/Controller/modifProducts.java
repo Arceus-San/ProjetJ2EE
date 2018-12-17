@@ -39,20 +39,35 @@ public class modifProducts extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, DAOException {
             DAO dao = (DAO) getServletContext().getAttribute("dao");
-            int ID = Integer.parseInt(request.getParameter("ID"));
-            float cost= Float.parseFloat(request.getParameter("Cost"));
-            int quantity= Integer.parseInt(request.getParameter("Quantity"));
-            float markup= Float.parseFloat(request.getParameter("Markup"));
-            String available;
-            String description= request.getParameter("Description");
-            if(quantity>0){
-                available="TRUE";
-            }else{
-                available="FALSE";
+            
+            String message;
+            
+            try{
+                int ID = Integer.parseInt(request.getParameter("ID"));
+                float cost= Float.parseFloat(request.getParameter("Cost"));
+                int quantity= Integer.parseInt(request.getParameter("Quantity"));
+                float markup= Float.parseFloat(request.getParameter("Markup"));
+                String available;
+                String description= request.getParameter("Description");
+                if(quantity>0){
+                    available="TRUE";
+                }else{
+                    available="FALSE";
+                }
+                
+                if(cost<0 || quantity<0 || markup<0){
+                    message = "Les nombres négatifs sont (évidemment) interdits. Veuillez rentrer des nombres valides";
+                }else if(description.isEmpty()){
+                    message = "Veuillez rentrer la description de votre produit";
+                }else{
+                    message = "Le produit a bien été mis à jour";
+                    dao.modifProduct(ID, cost, quantity, markup, available, description); 
+                }
+            }catch(NumberFormatException e){
+                message = "Veuillez remplir tous les champs avec des valeurs valides";
             }
-            dao.modifProduct(ID, cost, quantity, markup, available, description);   
             Properties resultat = new Properties();
-            resultat.put("message", "Le produit a bien été mis à jour");
+            resultat.put("message", message);
             try (PrintWriter out = response.getWriter()) {
             // On spécifie que la servlet va générer du JSON
             response.setContentType("application/json;charset=UTF-8");
