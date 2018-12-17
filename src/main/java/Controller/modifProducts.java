@@ -52,6 +52,7 @@ public class modifProducts extends HttpServlet {
             }
             dao.modifProduct(ID, cost, quantity, markup, available, description);   
             Properties resultat = new Properties();
+            resultat.put("message", "Le produit a bien été mis à jour");
             try (PrintWriter out = response.getWriter()) {
             // On spécifie que la servlet va générer du JSON
             response.setContentType("application/json;charset=UTF-8");
