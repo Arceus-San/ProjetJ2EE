@@ -331,7 +331,7 @@
             {{^records}}
             Vous n'avez aucune commande
             {{/records}}
-            <TABLE border=2 style="color:white">
+            <TABLE bgcolor="#000000" border=2 style="color:white">
             <tr><th>Numero</th><th>Customer_id</th><th>Product_id</th><th>Quantity</th><th>Shipping_cost</th><th>Sales_date</th><th>Shipping_date</th><th>freight_company</th></tr>
             {{! Pour chaque enregistrement }}
             {{#records}}
@@ -344,7 +344,7 @@
             
         </script>
     <script id="codesTemplate2" type="text/template">
-            <TABLE border=5 style="margin-bottom:60px;color:#FFFFFF;font-family:Arial Black">
+            <TABLE border=5 bgcolor="#000000" style="margin-bottom:60px;color:#FFFFFF;font-family:Arial Black">
 
                 <tr>
                     <th>Numero du produit</th><th>Numero du fournisseur</th><th>Code du produit</th><th>Prix</th><th>Quantité disponible</th>
@@ -367,7 +367,7 @@
         
  <script id="codesTemplate3" type="text/template">
             
-            <TABLE border=2 style="margin-bottom:20px;color:white;font-family:Arial">
+            <TABLE border=2 bgcolor="#000000" style="margin-bottom:20px;color:white;font-family:Arial">
             
                 <tr>
                     <th>Son ID</th><th>Discount_Code</th><th>Zip</th><th>Name</th><th>Adress1</th>
