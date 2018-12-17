@@ -60,19 +60,29 @@ public class modifCustomers extends HttpServlet {
             System.out.print(fax+" ");
             System.out.print(email+" ");
             System.out.print(credit+" ");*/
+            
+            String message;
+            
             Properties resultat = new Properties();
             
-            dao.modifCustomer(ID, name, addressline1, addressline2, city, state, phone, fax, email, credit);
-                       
-            resultat.put("message", "Vos informations ont bien été mises à jour");
-            
-            try (PrintWriter out = response.getWriter()) {
-                response.setContentType("application/json;charset=UTF-8");
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                out.println(gson.toJson(resultat));
-            }
-            
+            if(email.isEmpty()){
+                message = "Veuillez rentrer un mail valide";
+            }else if(name.isEmpty()){
+                message = "Veuillez rentrer le nom de votre companie";
+            }else{
+                message = "Vos informations ont bien été mises à jour";
 
+                dao.modifCustomer(ID, name, addressline1, addressline2, city, state, phone, fax, email, credit);
+
+                
+            }
+            resultat.put("message", message);
+
+                try (PrintWriter out = response.getWriter()) {
+                    response.setContentType("application/json;charset=UTF-8");
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    out.println(gson.toJson(resultat));
+                }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

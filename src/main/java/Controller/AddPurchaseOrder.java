@@ -51,7 +51,7 @@ public class AddPurchaseOrder extends HttpServlet {
                 
 	int product_ID = Integer.parseInt(request.getParameter("code2"));
         int customerID = (int)request.getSession(true).getAttribute("clientID");
-        int quantity = Integer.parseInt(request.getParameter("Quantite"));
+        String quantity = request.getParameter("Quantite");
         String companie = request.getParameter("Companie");
         
         HashMap<Integer, PurchaseOrder> allCommandes = dao.PurchaseOrdersInfos();
@@ -70,16 +70,20 @@ public class AddPurchaseOrder extends HttpServlet {
 
         shippingDate = c.getTime();
         
-        
-        try {
-            dao.modifQuantite(product_ID, quantity);
-            dao.addPurchaseOrder(maxID(allCommandes)+1, customerID, product_ID, quantity, Math.round(new Random().nextFloat()*10000f)/100f, dateFormat.format(today), dateFormat.format(shippingDate), companie);
-            message = "Votre commande a bien été enregistré";
-        } catch (NumberFormatException ex) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            message = ex.getMessage();
-	}
-		
+        if(companie.isEmpty() || quantity.isEmpty()){
+            message = "Veuillez remplir tous les champs";
+        }else if(Integer.parseInt(quantity) < 0){
+            message = "Veuillez rentrer une quantité valide";
+        }else{
+            try {
+                dao.modifQuantite(product_ID, Integer.parseInt(quantity));
+                dao.addPurchaseOrder(maxID(allCommandes)+1, customerID, product_ID, Integer.parseInt(quantity), Math.round(new Random().nextFloat()*10000f)/100f, dateFormat.format(today), dateFormat.format(shippingDate), companie);
+                message = "Votre commande a bien été enregistré";
+            } catch (NumberFormatException ex) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                message = ex.getMessage();
+            }
+        }
 	Properties resultat = new Properties();
 	resultat.put("message", message);
 

@@ -7,6 +7,7 @@ package Controller;
 
 import Modele.DAO;
 import Modele.DAOException;
+import Modele.Product;
 import Modele.PurchaseOrder;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -45,26 +46,37 @@ public class AddProduct extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, DAOException {
         DAO dao = (DAO) getServletContext().getAttribute("dao");
-                
-	int product_ID = Integer.parseInt(request.getParameter("ID"));
-        int manuf_ID = Integer.parseInt(request.getParameter("Manuf"));
-        float  prix = Float.parseFloat(request.getParameter("Prix"));
-        String code = request.getParameter("code");
-        int quantity = Integer.parseInt(request.getParameter("Quantite"));
-        float balisage = Float.parseFloat(request.getParameter("Balisage"));
-        String disponible = request.getParameter("Disponibilite");
-        String description = request.getParameter("Description");
         String message;
-        System.out.println(disponible);
         
-        try {
-            dao.addProduct(product_ID, manuf_ID, code, prix, quantity, balisage, disponible, description);
-            message = "Votre produit a bien été enregistré";
-        } catch (NumberFormatException ex) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            message = ex.getMessage();
-	}
-		
+        try{
+            int manuf_ID = Integer.parseInt(request.getParameter("Manuf"));
+            float  prix = Float.parseFloat(request.getParameter("Prix"));
+            String code = request.getParameter("code");
+            int quantity = Integer.parseInt(request.getParameter("Quantite"));
+            float balisage = Float.parseFloat(request.getParameter("Balisage"));
+            String description = request.getParameter("Description");
+
+            String disponible = quantity > 0 ? "TRUE" : "FALSE";
+
+            if(description.isEmpty()){
+                message  = "Veuillez remplir la description de votre produit";
+            }else if(prix < 0 || quantity < 0 || balisage < 0){
+                message = "On ne peut (évidemment) pas rentrer des nombres négatifs. Veuillez entrer des nombres valides";
+            }else{
+                HashMap<Integer,Product> allProduits = dao.productsInfos();
+
+                try {
+                    dao.addProduct(maxID(allProduits)+1, manuf_ID, code, prix, quantity, balisage, disponible, description);
+                    message = "Votre produit a bien été enregistré";
+                } catch (DAOException ex) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    message = ex.getMessage();
+                }
+            }
+            
+        }catch(NumberFormatException e){
+            message = "Veuillez remplir tous les champs avec des valeurs valides";
+        }
 	Properties resultat = new Properties();
 	resultat.put("message", message);
 
@@ -76,6 +88,15 @@ public class AddProduct extends HttpServlet {
         
     }
     
+    private int maxID(HashMap<Integer, Product> allProduits){
+        int max = 0;
+        for(int id: allProduits.keySet()){
+            if(id>max){
+                max = id;
+            }
+        }
+        return max;
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

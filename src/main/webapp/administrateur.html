@@ -373,7 +373,6 @@ and open the template in the editor.
         <legend>Ajouter un nouveau produit</legend>
         <form id="ajouter">
             <div id="ajout">
-            <label>ID:<input type="number" name="ID" /></label>
             <label>Numero du fournisseur:
                 <select name="Manuf" >
                     <option>19963323</option>
@@ -395,15 +394,9 @@ and open the template in the editor.
                     <option>FW</option>
                 </select>
             </label>
-            <label>Prix:<input type="number" name="Prix" step="0.01" /></label>
-            <label>Quantite:<input type="number" name="Quantite" /></label>
-            <label>Balisage:<input type="number" name="Balisage" step="0.01" /></label>
-            <label>Disponibilite:
-                    <select name="Disponibilite" >
-                        <option value="TRUE">TRUE</option>
-                        <option value="FALSE">FALSE</option>
-                    </select>
-            </label>
+            <label>Prix:<input type="number" name="Prix" step="0.01" min="0" required /></label>
+            <label>Quantite:<input type="number" name="Quantite" min="0" required /></label>
+            <label>Balisage:<input type="number" name="Balisage" step="0.01" min="0" required /></label>
             <label>Description:<input type="text" name="Description" /></label>
             <input type='button' value='Ajouter' onclick='addProduct()'>
             </div>

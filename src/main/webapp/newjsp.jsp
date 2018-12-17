@@ -355,8 +355,8 @@
                     <tr>
                         <td>{{id}}</td><td>{{manuf_id}}</td><td>{{prod_code}}</td><td>{{cost}}</td><td>{{quantity}}</td>
                         <td>{{markup}}</td><td>{{available}}</td><td>{{description}}</td>
-                        <td><input id="Quantite-{{id}}" type="number" min="1" max="{{quantity}}"></td>
-                        <td><input id="Companie-{{id}}" type="text"></td>
+                        <td><input id="Quantite-{{id}}" type="number" min="1" max="{{quantity}}" required /></td>
+                        <td><input id="Companie-{{id}}" type="text" required /></td>
                         <td><img src="img/commander.png" onclick="addCode('{{id}}')" style="width:60px;height:30px" ></td>
                     </tr>
                 {{/records}}
@@ -375,8 +375,8 @@
                 </tr>
                 
                     <tr>
-                        <td>{{id}}</td><td>{{discount_code}}</td><td>{{zip}}</td><td><input id="Name" type="text" value="{{name}}" /></td><td><input id="adress1" type="text" value="{{adress1}}" /></td>
-                        <td><input id="adress2" type="text" value="{{adress2}}" /></td><td><input id="City" type="text" value="{{city}}" /></td><td><input id="State" type="text" value="{{state}}" /></td><th><input id="Phone" type="text" value="{{phone}}" /></th><th><input id="Fax" type="text" value="{{fax}}" /></th><th><input id="Email" type="text" value="{{email}}" /></th><th><input id="Credit" type="number" value="{{credit_limit}}" /></th>
+                        <td>{{id}}</td><td>{{discount_code}}</td><td>{{zip}}</td><td><input id="Name" type="text" value="{{name}}" required /></td><td><input id="adress1" type="text" value="{{adress1}}" /></td>
+                        <td><input id="adress2" type="text" value="{{adress2}}" /></td><td><input id="City" type="text" value="{{city}}" /></td><td><input id="State" type="text" value="{{state}}" /></td><th><input id="Phone" type="text" value="{{phone}}" /></th><th><input id="Fax" type="text" value="{{fax}}" /></th><th><input id="Email" type="text" value="{{email}}" required /></th><th><input id="Credit" type="number" value="{{credit_limit}}" /></th>
                         <th><button onclick="Mofidcustomer({{id}})">Modifier</button></th>
                     </tr>
             
