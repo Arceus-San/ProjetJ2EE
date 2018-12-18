@@ -223,6 +223,7 @@
             data: objColonnes,
             success: function(result){
                 $('#message').html(result.message);
+                showCodes();
                 showCodes2();
             }
         });
@@ -371,7 +372,7 @@
 
             <tr>
                 <th>Numéro du produit</th><th>Numéro du fournisseur</th><th>Code Promo</th><th>Prix</th><th>Quantité disponible</th>
-                <th>Balisage</th><th>Disponible</th><th>Description</th><th>Quantité</th><th>Companie</th><th>Commander</th>
+                <th>Balisage</th><th>Disponible</th><th>Description</th><th>Quantité</th><th>Companie de livraison</th><th>Commander</th>
             </tr>
 
             {{#records}}
